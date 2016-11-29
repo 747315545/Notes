@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_main"
+    android:layout_width="fill_parent" android:layout_height="@dimen/item_height"
+    android:background="@drawable/main_item_click">
+    <RelativeLayout
+        android:id="@+id/item_rl_checkbox"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/item_height">
+        <CheckBox
+            android:id="@+id/item_checkbox"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:clickable="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/checkbox_margin_left"
+            android:checked="false"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/item_height"
+        android:layout_toRightOf="@id/item_rl_checkbox"
+        android:layout_centerInParent="true">
+        <RelativeLayout android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/item_tv_title_margin_left"
+            android:layout_centerVertical="true">
+            <ImageView
+                android:id="@+id/item_iv"
+                android:layout_width="@dimen/item_iv_side_length"
+                android:layout_height="@dimen/item_iv_side_length"
+                android:scaleType="fitXY"
+                android:layout_marginRight="@dimen/item_iv_margin_right"
+                android:src="@drawable/ic_image"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true" />
+            <TextView
+                android:textSize="@dimen/item_tv_title_text_size"
+                android:textColor="@color/item_tv_title_text_color"
+                android:ellipsize="end"
+                android:id="@+id/item_tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/item_tv_title_margin_right"
+                android:maxWidth="@dimen/item_tv_title_max_width_no_pic"
+                android:text="随笔sadhasofhobhoaguedhguowagdhuowaouvqou"
+                android:singleLine="true" android:layout_alignParentLeft="true" />
+            <TextView
+                android:textSize="@dimen/item_tv_modified_date_text_size"
+                android:textColor="@color/item_tv_modified_date_text_color"
+                android:id="@+id/item_tv_modified_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2015年12月31日"
+                android:layout_below="@id/item_tv_title" />
+            <TextView
+                android:textSize="@dimen/item_tv_summary_text_size"
+                android:textColor="@color/item_tv_summary_text_color"
+                android:ellipsize="end"
+                android:id="@+id/item_tv_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/item_tv_summary_margin_left"
+                android:layout_marginRight="@dimen/item_tv_title_margin_right"
+                android:maxWidth="@dimen/item_tv_summary_max_width_has_pic"
+                android:text="正文1239u2e4i3whfreiohtowrhfpqwejir9u230ejhiiewhiip"
+                android:singleLine="true"
+                android:layout_toLeftOf="@id/item_iv"
+                android:layout_toRightOf="@id/item_tv_modified_date"
+                android:layout_alignBaseline="@id/item_tv_modified_date" />
+        </RelativeLayout>
+    </RelativeLayout>
+    <View
+        android:background="@color/view_bottom_delete_bg"
+        android:layout_width="fill_parent"
+        android:layout_height="2.0px"
+        android:layout_marginLeft="@dimen/item_line_margin_left"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

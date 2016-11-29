@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_popup_window"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_pop_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:background="@drawable/main_item_click"
+        android:gravity="center"
+        android:textColor="@color/tv_main_activity_edit_text_color"
+        android:textSize="@dimen/tv_edit_text_size" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2.0px"
+        android:background="@color/view_bottom_delete_bg" />
+
+    <TextView
+        android:id="@+id/tv_pop_delete"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:background="@drawable/main_item_click"
+        android:gravity="center"
+        android:text="@string/delete"
+        android:textColor="@color/title_text_black_color"
+        android:textSize="@dimen/tv_title_text_size" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="10.0px"
+        android:background="@color/title_bg" />
+
+    <TextView
+        android:id="@+id/tv_pop_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:background="@drawable/main_item_click"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:textColor="@color/title_text_black_color"
+        android:textSize="@dimen/tv_title_text_size" />
+
+</LinearLayout>

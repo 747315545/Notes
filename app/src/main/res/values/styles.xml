@@ -1,0 +1,22 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/title_bg</item>
+        <item name="colorPrimaryDark">@color/title_bg</item>
+        <item name="android:windowAnimationStyle">@style/anim</item>
+        <item name="android:statusBarColor">@color/title_bg</item>
+          <item name="android:windowLightStatusBar">true</item>
+    </style>
+    <style name="anim">
+        <item name="android:activityOpenExitAnimation">@anim/out_to_left</item>
+        <item name="android:activityOpenEnterAnimation">@anim/in_from_right</item>
+        <item name="android:activityCloseEnterAnimation">@anim/in_from_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/out_to_right</item>
+    </style>
+    <style name="popupWindowAnim">
+        <item name="android:windowEnterAnimation">@anim/popupwindow_show</item>
+        <item name="android:windowExitAnimation">@anim/popupwindow_hidden</item>
+    </style>
+</resources>

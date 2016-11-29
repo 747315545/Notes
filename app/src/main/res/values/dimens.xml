@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="abc_alert_dialog_button_bar_height">48.0dip</dimen>
+    <dimen name="abc_action_bar_default_height_material">56.0dip</dimen>
+    <dimen name="abc_action_bar_progress_bar_size">40.0dip</dimen>
+    <dimen name="abc_text_size_subtitle_material_toolbar">16.0dip</dimen>
+    <dimen name="abc_text_size_title_material_toolbar">20.0dip</dimen>
+    <dimen name="abc_config_prefDialogWidth">320.0dip</dimen>
+    <dimen name="abc_search_view_text_min_width">160.0dip</dimen>
+    <item type="dimen" name="dialog_fixed_height_major">79.99999%</item>
+    <item type="dimen" name="dialog_fixed_height_minor">100.0%</item>
+    <dimen name="dialog_fixed_width_major">320.0dip</dimen>
+    <dimen name="dialog_fixed_width_minor">320.0dip</dimen>
+    <dimen name="abc_action_bar_content_inset_material">16.0dip</dimen>
+    <dimen name="abc_action_bar_default_padding_end_material">0.0dip</dimen>
+    <dimen name="abc_action_bar_default_padding_start_material">0.0dip</dimen>
+    <dimen name="abc_switch_padding">3.0dip</dimen>
+    <dimen name="activity_horizontal_margin">16.0dip</dimen>
+    <dimen name="abc_action_bar_icon_vertical_padding_material">16.0dip</dimen>
+    <dimen name="abc_action_bar_overflow_padding_end_material">10.0dip</dimen>
+    <dimen name="abc_action_bar_overflow_padding_start_material">6.0dip</dimen>
+    <dimen name="abc_action_bar_stacked_max_height">48.0dip</dimen>
+    <dimen name="abc_action_bar_stacked_tab_max_width">180.0dip</dimen>
+    <dimen name="abc_action_bar_subtitle_bottom_margin_material">5.0dip</dimen>
+    <dimen name="abc_action_bar_subtitle_top_margin_material">-3.0dip</dimen>
+    <dimen name="abc_action_button_min_height_material">48.0dip</dimen>
+    <dimen name="abc_action_button_min_width_material">48.0dip</dimen>
+    <dimen name="abc_action_button_min_width_overflow_material">36.0dip</dimen>
+    <item type="dimen" name="abc_button_inset_horizontal_material">@dimen/abc_control_inset_material</item>
+    <dimen name="abc_button_inset_vertical_material">6.0dip</dimen>
+    <dimen name="abc_button_padding_horizontal_material">8.0dip</dimen>
+    <item type="dimen" name="abc_button_padding_vertical_material">@dimen/abc_control_padding_material</item>
+    <dimen name="abc_control_corner_material">2.0dip</dimen>
+    <dimen name="abc_control_inset_material">4.0dip</dimen>
+    <dimen name="abc_control_padding_material">4.0dip</dimen>
+    <dimen name="abc_dialog_list_padding_vertical_material">8.0dip</dimen>
+    <item type="dimen" name="abc_dialog_min_width_major">65.0%</item>
+    <item type="dimen" name="abc_dialog_min_width_minor">95.00001%</item>
+    <dimen name="abc_dialog_padding_material">24.0dip</dimen>
+    <dimen name="abc_dialog_padding_top_material">18.0dip</dimen>
+    <item type="dimen" name="abc_disabled_alpha_material_dark">0.3</item>
+    <item type="dimen" name="abc_disabled_alpha_material_light">0.26</item>
+    <dimen name="abc_dropdownitem_icon_width">32.0dip</dimen>
+    <dimen name="abc_dropdownitem_text_padding_left">8.0dip</dimen>
+    <dimen name="abc_dropdownitem_text_padding_right">8.0dip</dimen>
+    <dimen name="abc_edit_text_inset_bottom_material">7.0dip</dimen>
+    <dimen name="abc_edit_text_inset_horizontal_material">4.0dip</dimen>
+    <dimen name="abc_edit_text_inset_top_material">10.0dip</dimen>
+    <dimen name="abc_floating_window_z">16.0dip</dimen>
+    <item type="dimen" name="abc_list_item_padding_horizontal_material">@dimen/abc_action_bar_content_inset_material</item>
+    <dimen name="abc_panel_menu_list_width">296.0dip</dimen>
+    <dimen name="abc_search_view_preferred_width">320.0dip</dimen>
+    <dimen name="abc_text_size_body_1_material">14.0sp</dimen>
+    <dimen name="abc_text_size_body_2_material">14.0sp</dimen>
+    <dimen name="abc_text_size_button_material">14.0sp</dimen>
+    <dimen name="abc_text_size_caption_material">12.0sp</dimen>
+    <dimen name="abc_text_size_display_1_material">34.0sp</dimen>
+    <dimen name="abc_text_size_display_2_material">45.0sp</dimen>
+    <dimen name="abc_text_size_display_3_material">56.0sp</dimen>
+    <dimen name="abc_text_size_display_4_material">112.0sp</dimen>
+    <dimen name="abc_text_size_headline_material">24.0sp</dimen>
+    <dimen name="abc_text_size_large_material">22.0sp</dimen>
+    <dimen name="abc_text_size_medium_material">18.0sp</dimen>
+    <dimen name="abc_text_size_menu_material">16.0sp</dimen>
+    <dimen name="abc_text_size_small_material">14.0sp</dimen>
+    <dimen name="abc_text_size_subhead_material">16.0sp</dimen>
+    <dimen name="abc_text_size_title_material">20.0sp</dimen>
+    <dimen name="activity_vertical_margin">16.0dip</dimen>
+    <dimen name="content_padding_left">42.0dip</dimen>
+    <dimen name="content_padding_right">42.0dip</dimen>
+    <dimen name="content_padding_top">42.0dip</dimen>
+    <dimen name="dialog_item_text_size">15.0sp</dimen>
+    <dimen name="dialog_title_text_size">16.0sp</dimen>
+    <item type="dimen" name="disabled_alpha_material_dark">0.3</item>
+    <item type="dimen" name="disabled_alpha_material_light">0.26</item>
+    <dimen name="frame_bg_bottom_padding">50.0dip</dimen>
+    <dimen name="frame_bg_left_padding">16.0dip</dimen>
+    <dimen name="frame_bg_right_padding">16.0dip</dimen>
+    <dimen name="frame_bg_top_padding">16.0dip</dimen>
+    <item type="dimen" name="highlight_alpha_material_colored">0.26</item>
+    <item type="dimen" name="highlight_alpha_material_dark">0.2</item>
+    <item type="dimen" name="highlight_alpha_material_light">0.12</item>
+    <dimen name="no_results_margin_top">111.0dip</dimen>
+    <dimen name="notification_large_icon_height">64.0dip</dimen>
+    <dimen name="notification_large_icon_width">64.0dip</dimen>
+    <dimen name="notification_subtext_size">12.0dip</dimen>
+    <dimen name="radio_btn_side_len">18.0dip</dimen>
+    <dimen name="radio_text_margin_left">10.0dip</dimen>
+    <dimen name="radio_text_margin_right">6.0dip</dimen>
+    <dimen name="radio_text_padding_bottom">5.0dip</dimen>
+    <dimen name="share_photo_line_space">7.0dip</dimen>
+    <dimen name="share_photo_radio_text_space">11.0dip</dimen>
+    <dimen name="share_photo_segment_space">16.0dip</dimen>
+    <dimen name="share_photo_slogan_size">10.0dip</dimen>
+    <dimen name="share_photo_sub_segment_space">5.0dip</dimen>
+    <dimen name="share_photo_text_size">13.0dip</dimen>
+    <dimen name="text_size_14_sp">14.0sp</dimen>
+    <dimen name="text_size_15_sp">15.0sp</dimen>
+    <dimen name="text_size_16_sp">16.0sp</dimen>
+    <dimen name="text_size_17_sp">17.0sp</dimen>
+    <dimen name="text_size_18_sp">18.0sp</dimen>
+    <dimen name="add_pic_edit_text_width">33.0dip</dimen>
+    <dimen name="add_pic_stroke_width">3.0dip</dimen>
+    <dimen name="btn_add_height">60.0dip</dimen>
+    <dimen name="btn_add_margin_bottom">20.0dip</dimen>
+    <dimen name="btn_add_margin_left">150.0dip</dimen>
+    <dimen name="btn_add_width">60.0dip</dimen>
+    <dimen name="checkbox_height">32.0dip</dimen>
+    <dimen name="checkbox_margin_left">10.0dip</dimen>
+    <dimen name="checkbox_width">32.0dip</dimen>
+    <dimen name="edit_activity_bottom_ll_height">44.0dip</dimen>
+    <dimen name="edit_activity_bottom_ll_margin_left">20.0dip</dimen>
+    <dimen name="edit_activity_bottom_ll_margin_right">20.0dip</dimen>
+    <dimen name="edit_activity_iv_delete_height">32.0dip</dimen>
+    <dimen name="edit_activity_iv_delete_width">32.0dip</dimen>
+    <dimen name="edit_activity_iv_share_margin_end">10.0dip</dimen>
+    <dimen name="edit_activity_tv_date_margin_bottom">5.0dip</dimen>
+    <dimen name="edit_activity_tv_date_margin_top">1.0dip</dimen>
+    <dimen name="edit_activity_tv_date_text_size">10.0dip</dimen>
+    <dimen name="edit_activity_tv_title_margin_top">3.0dip</dimen>
+    <dimen name="edit_activity_tv_title_text_size">17.0dip</dimen>
+    <dimen name="edit_cursor_height">18.0dip</dimen>
+    <dimen name="edit_show_mode_margin_bottom">104.0dip</dimen>
+    <dimen name="ev_edit_activity_padding">16.0dip</dimen>
+    <dimen name="ev_edit_activity_padding_bottom">10.0dip</dimen>
+    <dimen name="ev_edit_activity_padding_pic_top">10.0dip</dimen>
+    <dimen name="ev_edit_activity_text_size">15.0sp</dimen>
+    <dimen name="item_height">60.0dip</dimen>
+    <dimen name="item_iv_height">32.0dip</dimen>
+    <dimen name="item_iv_margin_right">16.0dip</dimen>
+    <dimen name="item_iv_side_length">32.0dip</dimen>
+    <dimen name="item_iv_width">32.0dip</dimen>
+    <dimen name="item_line_margin_left">16.0dip</dimen>
+    <dimen name="item_rl_width">53.0dip</dimen>
+    <dimen name="item_tv_delete_text_size">15.0sp</dimen>
+    <dimen name="item_tv_delete_width">62.0dip</dimen>
+    <dimen name="item_tv_modified_date_text_size">12.0sp</dimen>
+    <dimen name="item_tv_summary_margin_left">12.0dip</dimen>
+    <dimen name="item_tv_summary_max_width_has_pic">200.0dip</dimen>
+    <dimen name="item_tv_summary_max_width_has_pic_edit_mode">168.0dip</dimen>
+    <dimen name="item_tv_summary_max_width_no_pic">248.0dip</dimen>
+    <dimen name="item_tv_summary_max_width_no_pic_edit_mode">216.0dip</dimen>
+    <dimen name="item_tv_summary_text_size">12.0sp</dimen>
+    <dimen name="item_tv_title_margin_left">16.0dip</dimen>
+    <dimen name="item_tv_title_margin_right">16.0dip</dimen>
+    <dimen name="item_tv_title_max_width_has_pic">288.0dip</dimen>
+    <dimen name="item_tv_title_max_width_has_pic_edit_mode">256.0dip</dimen>
+    <dimen name="item_tv_title_max_width_no_pic">320.0dip</dimen>
+    <dimen name="item_tv_title_max_width_no_pic_edit_mode">288.0dip</dimen>
+    <dimen name="item_tv_title_text_size">15.0sp</dimen>
+    <dimen name="iv_activity_main_no_data_height">102.0dip</dimen>
+    <dimen name="iv_activity_main_no_data_width">126.0dip</dimen>
+    <dimen name="iv_edit_activity_pic_width">322.0dip</dimen>
+    <dimen name="iv_edit_activity_title_back_arrow_margin_start">6.0dip</dimen>
+    <dimen name="iv_edit_activity_width">327.0dip</dimen>
+    <dimen name="rl_activity_main_no_data_margin_top">111.0dip</dimen>
+    <dimen name="rl_check_edit_activity_margin_top">10.0dip</dimen>
+    <dimen name="rl_checkbox_width">42.0dip</dimen>
+    <dimen name="rl_title_height">46.0dip</dimen>
+    <dimen name="title_tv_cancel_margin_left">16.0dip</dimen>
+    <dimen name="title_tv_cancel_text_size">14.0sp</dimen>
+    <dimen name="tv_activity_main_no_data_text_size">14.0sp</dimen>
+    <dimen name="tv_bottom_delete_height">52.0dip</dimen>
+    <dimen name="tv_bottom_delete_text_size">15.0sp</dimen>
+    <dimen name="tv_edit_margin_end">16.0dip</dimen>
+    <dimen name="tv_edit_text_size">14.0sp</dimen>
+    <dimen name="tv_line_spacing_extra_edit_activity">10.0dip</dimen>
+    <dimen name="tv_title_margin_end">16.0dip</dimen>
+    <dimen name="tv_title_text_size">17.0sp</dimen>
+    <dimen name="tv_title_width">210.0dip</dimen>
+</resources>

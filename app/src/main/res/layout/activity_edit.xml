@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_edit_activity"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/title_bg"
+    android:clickable="true">
+
+    <RelativeLayout
+        android:id="@+id/rl_edit_activity_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/edit_activity_title_show"
+            layout="@layout/title_activity_edit_show" />
+
+        <include
+            android:id="@+id/edit_activity_new_edit"
+            layout="@layout/title_activity_edit_new_edit" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view_title"
+        android:layout_width="fill_parent"
+        android:layout_height="2.0px"
+        android:layout_below="@id/rl_edit_activity_title"
+        android:background="#ffd6d6d6" />
+
+    <LinearLayout
+        android:id="@+id/edit_activity_bottom_ll"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/edit_activity_bottom_ll_height"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/edit_activity_bottom_ll_margin_left"
+        android:layout_marginRight="@dimen/edit_activity_bottom_ll_margin_right"
+        android:orientation="horizontal"
+        android:weightSum="4.0">
+
+        <ImageView
+            android:id="@+id/edit_activity_iv_delete"
+            android:layout_width="@dimen/edit_activity_iv_delete_width"
+            android:layout_height="@dimen/edit_activity_iv_delete_height"
+            android:layout_gravity="center"
+            android:layout_weight="1.0"
+            android:clickable="true"
+            android:src="@drawable/iv_edit_activity_delete" />
+
+        <ImageView
+            android:id="@+id/edit_activity_iv_pic"
+            android:layout_width="@dimen/edit_activity_iv_delete_width"
+            android:layout_height="@dimen/edit_activity_iv_delete_height"
+            android:layout_gravity="center"
+            android:layout_weight="1.0"
+            android:clickable="true"
+            android:src="@drawable/iv_edit_activity_pic" />
+
+        <ImageView
+            android:id="@+id/edit_activity_iv_camera"
+            android:layout_width="@dimen/edit_activity_iv_delete_width"
+            android:layout_height="@dimen/edit_activity_iv_delete_height"
+            android:layout_gravity="center"
+            android:layout_weight="1.0"
+            android:clickable="true"
+            android:src="@drawable/iv_edit_activity_camera" />
+
+        <ImageView
+            android:id="@+id/edit_activity_iv_check"
+            android:layout_width="@dimen/edit_activity_iv_delete_width"
+            android:layout_height="@dimen/edit_activity_iv_delete_height"
+            android:layout_gravity="center"
+            android:layout_weight="1.0"
+            android:clickable="true"
+            android:src="@drawable/iv_edit_activity_radio" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_content_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/edit_activity_bottom_ll"
+        android:layout_below="@id/rl_edit_activity_title"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/sv_edit_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/ll_edit_content"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:padding="@dimen/ev_edit_activity_padding"
+                android:scrollbars="none"/>
+        </ScrollView>
+    </LinearLayout>
+</RelativeLayout>

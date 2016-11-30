@@ -46,7 +46,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/item_tv_title_margin_right"
                 android:maxWidth="@dimen/item_tv_title_max_width_no_pic"
-                android:text="随笔sadhasofhobhoaguedhguowagdhuowaouvqou"
                 android:singleLine="true" android:layout_alignParentLeft="true" />
             <TextView
                 android:textSize="@dimen/item_tv_modified_date_text_size"
@@ -54,7 +53,6 @@
                 android:id="@+id/item_tv_modified_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2015年12月31日"
                 android:layout_below="@id/item_tv_title" />
             <TextView
                 android:textSize="@dimen/item_tv_summary_text_size"
@@ -66,7 +64,6 @@
                 android:layout_marginLeft="@dimen/item_tv_summary_margin_left"
                 android:layout_marginRight="@dimen/item_tv_title_margin_right"
                 android:maxWidth="@dimen/item_tv_summary_max_width_has_pic"
-                android:text="正文1239u2e4i3whfreiohtowrhfpqwejir9u230ejhiiewhiip"
                 android:singleLine="true"
                 android:layout_toLeftOf="@id/item_iv"
                 android:layout_toRightOf="@id/item_tv_modified_date"

@@ -18,13 +18,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.zui.notes.adapter.NotesAdapter;
 import com.zui.notes.db.NoteInfoColumns;
 import com.zui.notes.model.NoteInfo;
 import com.zui.notes.widget.DeletePopupWindow;
 import java.util.LinkedList;
 import java.util.List;
+import android.widget.Toast;
+
+/**
+ * Created by huangfei on 2016/11/9.
+ */
 
 public class MainActivity extends Activity implements View.OnClickListener {
     private TextView tvEdit;
@@ -46,7 +50,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private boolean selectAll = false;
     public static final int REQUEST_EXTERNAL_STORAGE_CODE = 1;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +59,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         initData();
     }
 
-
     @Override
     protected void onResume() {
         if (this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
@@ -64,7 +66,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             this.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_CODE);
         } else if (this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             this.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_CODE);
-        } else if(this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        } else if(this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             this.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_CODE);
         }
         super.onResume();
@@ -162,15 +164,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 notesAdapter.selectAll(selectAll);
                 break;
             case R.id.rl_bottom_delete:
-                deletePopupWindow = new DeletePopupWindow(MainActivity.this, this, itemCount);
-                deletePopupWindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_main), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                deletePopupWindow = new DeletePopupWindow(MainActivity.this,this,itemCount);
+                deletePopupWindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_main), Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
             case R.id.btn_add:
-                startActivity(new Intent(MainActivity.this, EditActivity.class));
+                startActivity(new Intent(MainActivity.this,EditActivity.class));
                 break;
             case R.id.tv_pop_delete:
                 deletePopupWindow.dismiss();
-                deletePopupWindow = null;
+                deletePopupWindow=null;
                 notesAdapter.deleteSelected();
             default:
                 break;
@@ -200,7 +202,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             rlNoData.setVisibility(View.VISIBLE);
             tvEdit.setClickable(false);
             tvEdit.setTextColor(MainActivity.this.getResources().getColor(R.color.tv_main_activity_edit_text_color_text_color_enabled_false));
-        } else {
+        }else {
             rlNoData.setVisibility(View.GONE);
             tvEdit.setClickable(true);
             tvEdit.setTextColor(MainActivity.this.getResources().getColor(R.color.tv_main_activity_edit_text_color));
@@ -242,10 +244,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == REQUEST_EXTERNAL_STORAGE_CODE) {
-            for (int i = 0; i < grantResults.length; i++) {
-                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+        if(requestCode==REQUEST_EXTERNAL_STORAGE_CODE){
+            for(int i=0;i<grantResults.length;i++){
+                if(grantResults[i]!=PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(MainActivity.this,"Permission Denied",Toast.LENGTH_SHORT).show();
                     finish();
                     return;
                 }

@@ -3,11 +3,10 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/title_bg</item>
-        <item name="colorPrimaryDark">@color/title_bg</item>
+        <item name="android:windowNoTitle">true</item>   
         <item name="android:windowAnimationStyle">@style/anim</item>
         <item name="android:statusBarColor">@color/title_bg</item>
-          <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
     <style name="anim">
         <item name="android:activityOpenExitAnimation">@anim/out_to_left</item>

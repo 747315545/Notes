@@ -1,5 +1,7 @@
 package com.zui.notes.db;
-
+/**
+ * Created by huangfei on 2016/11/9.
+ */
 public abstract interface NoteInfoColumns
 {
     public static final String BODY = "body";

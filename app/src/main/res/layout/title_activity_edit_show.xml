@@ -16,7 +16,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/edit_activity_tv_title_margin_top"
-            android:text="2016年7月11日"
             android:layout_centerHorizontal="true" />
         <TextView
             android:textSize="@dimen/edit_activity_tv_date_text_size"
@@ -26,7 +25,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/edit_activity_tv_date_margin_top"
             android:layout_marginBottom="@dimen/edit_activity_tv_date_margin_bottom"
-            android:text="上午10:10"
             android:layout_below="@id/edit_activity_tv_title_date"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>

@@ -14,7 +14,6 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,12 +22,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.zui.notes.db.NoteInfoColumns;
 import com.zui.notes.model.MyList;
 import com.zui.notes.model.NoteInfo;
@@ -104,28 +103,6 @@ public class EditActivity extends Activity implements View.OnClickListener, View
             tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color_enabled_false));
             tvTitleFinish.setClickable(false);
             addCheckBoxLayout(false, false, null);
-            ((EditText) ((ViewGroup) viewList.get(0)).getChildAt(1)).addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.length() == 0 && viewList.toString().equals("000")) {
-                        tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color_enabled_false));
-                        tvTitleFinish.setClickable(false);
-                    } else {
-                        tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color));
-                        tvTitleFinish.setClickable(true);
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
             inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
         } else {
             tvTitleDate.setText(Utils.getYearMonthDay(note.modifiedTime));
@@ -133,6 +110,28 @@ public class EditActivity extends Activity implements View.OnClickListener, View
             fillViewByBody(note.body);
             llEditContent.requestFocus();
         }
+        ((EditText) ((ViewGroup) viewList.get(0)).getChildAt(1)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() == 0 && viewList.toString().equals("000")) {
+                    tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color_enabled_false));
+                    tvTitleFinish.setClickable(false);
+                } else {
+                    tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color));
+                    tvTitleFinish.setClickable(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     private void initView() {
@@ -213,8 +212,6 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                 intentForPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 intentForPic.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(intentForPic, RESULT_CODE);
-                tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color));
-                tvTitleFinish.setClickable(true);
                 break;
             case R.id.edit_activity_iv_camera:
                 file = new File(getSavePath());
@@ -224,11 +221,9 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                 Intent intentForCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intentForCamera.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intentForCamera.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-                Uri uri = FileProvider.getUriForFile(EditActivity.this, BuildConfig.APPLICATION_ID + ".fileProvider", file);
+                Uri uri = FileProvider.getUriForFile(EditActivity.this, "com.zui.notes.fileProvider", file);
                 intentForCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intentForCamera, CODE_CAMERA);
-                tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color));
-                tvTitleFinish.setClickable(true);
                 break;
             case R.id.tv_pop_delete:
                 deletePopupWindow.dismiss();
@@ -348,9 +343,12 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                     file.getParentFile().mkdirs();
                 }
                 if (ImageUtils.SmallBitmap(getRealPath(uri), k, file)) {
-                    Log.e("123123123","dddddd");
                     addPicLayout(getSavePath());
                     addCheckBoxLayout(false, false, null);
+                    if (mode == NEW_MODE) {
+                        tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color));
+                        tvTitleFinish.setClickable(true);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -360,6 +358,10 @@ public class EditActivity extends Activity implements View.OnClickListener, View
             if (ImageUtils.SmallBitmap(getSavePath(), k, file)) {
                 addPicLayout(getSavePath());
                 addCheckBoxLayout(false, false, null);
+                if (mode == NEW_MODE) {
+                    tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color));
+                    tvTitleFinish.setClickable(true);
+                }
             }
         }
         file = null;
@@ -405,6 +407,15 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         viewList.add(position + 1, relativeLayout);
         llEditContent.addView(relativeLayout, position + 1);
         editText.requestFocus();
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EditActivity.this, PhotoViewActivity.class);
+                intent.putExtra("pic_path", imageView.picFolderAndName);
+                EditActivity.this.startActivity(intent);
+                EditActivity.this.overridePendingTransition(R.anim.center_zoom_in, 0);
+            }
+        });
     }
 
     private String getSavePath() {
@@ -424,8 +435,18 @@ public class EditActivity extends Activity implements View.OnClickListener, View
 
     private void addCheckBoxLayout(boolean isCheckBoxShow, boolean isChecked, String text) {
         final CheckboxLayout relativeLayout = (CheckboxLayout) LayoutInflater.from(EditActivity.this).inflate(R.layout.check_layout, null);
-        CheckBox checkBox = (CheckBox) relativeLayout.findViewById(R.id.cb_edit_activity);
-        EditText editText = (EditText) relativeLayout.findViewById(R.id.ev_check_edit_activity);
+        final CheckBox checkBox = (CheckBox) relativeLayout.findViewById(R.id.cb_edit_activity);
+        final EditText editText = (EditText) relativeLayout.findViewById(R.id.ev_check_edit_activity);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    editText.setTextColor(EditActivity.this.getResources().getColor(R.color.ev_edit_activity_check_text_color));
+                } else {
+                    editText.setTextColor(EditActivity.this.getResources().getColor(R.color.ev_edit_activity_text_color));
+                }
+            }
+        });
         if (isCheckBoxShow) {
             checkBox.setChecked(isChecked);
             checkBox.setVisibility(View.VISIBLE);

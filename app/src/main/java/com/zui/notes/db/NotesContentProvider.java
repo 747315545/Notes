@@ -6,7 +6,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.annotation.Nullable;
 
 /**
  * Created by huangfei on 2016/11/11.
@@ -31,7 +30,6 @@ public class NotesContentProvider extends ContentProvider {
         return false;
     }
 
-    @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
@@ -42,14 +40,12 @@ public class NotesContentProvider extends ContentProvider {
         }
         return null;
     }
-
-    @Nullable
+    
     @Override
     public String getType(Uri uri) {
         return null;
     }
 
-    @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         switch (uriMatcher.match(uri)) {

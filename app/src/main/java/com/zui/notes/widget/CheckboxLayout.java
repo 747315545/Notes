@@ -2,14 +2,9 @@ package com.zui.notes.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
-import com.zui.notes.util.ViewListInterface;
 
 /**
  * Created by huangfei on 2016/11/24.

@@ -166,6 +166,8 @@ public class EditActivity extends Activity implements View.OnClickListener, View
             @Override
             public void onClick(View v) {
                 CheckBoxShowOrAdd(getFocusedPosition());
+                tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color));
+                tvTitleFinish.setClickable(true);
             }
         });
     }
@@ -211,6 +213,8 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                 intentForPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 intentForPic.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(intentForPic, RESULT_CODE);
+                tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color));
+                tvTitleFinish.setClickable(true);
                 break;
             case R.id.edit_activity_iv_camera:
                 file = new File(getSavePath());
@@ -223,6 +227,8 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                 Uri uri = FileProvider.getUriForFile(EditActivity.this, BuildConfig.APPLICATION_ID + ".fileProvider", file);
                 intentForCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intentForCamera, CODE_CAMERA);
+                tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color));
+                tvTitleFinish.setClickable(true);
                 break;
             case R.id.tv_pop_delete:
                 deletePopupWindow.dismiss();
@@ -342,6 +348,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                     file.getParentFile().mkdirs();
                 }
                 if (ImageUtils.SmallBitmap(getRealPath(uri), k, file)) {
+                    Log.e("123123123","dddddd");
                     addPicLayout(getSavePath());
                     addCheckBoxLayout(false, false, null);
                 }
@@ -394,8 +401,9 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         editText.setLayoutParams(layoutParams);
         editText.setBackgroundColor(getResources().getColor(R.color.pic_line_color));
         relativeLayout.addView(editText);
-        viewList.add(getFocusedPosition() + 1, relativeLayout);
-        llEditContent.addView(relativeLayout, getFocusedPosition() + 1);
+        int position = getFocusedPosition();
+        viewList.add(position + 1, relativeLayout);
+        llEditContent.addView(relativeLayout, position + 1);
         editText.requestFocus();
     }
 
@@ -427,9 +435,10 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         if (text != null) {
             editText.setText(text);
         }
-        if (getFocusedPosition() != -1) {
-            viewList.add(getFocusedPosition() + 1, relativeLayout);
-            llEditContent.addView(relativeLayout, getFocusedPosition() + 1);
+        int i = getFocusedPosition();
+        if (i != -1) {
+            viewList.add(i + 1, relativeLayout);
+            llEditContent.addView(relativeLayout, i + 1);
         } else {
             viewList.add(relativeLayout);
             llEditContent.addView(relativeLayout);
@@ -486,6 +495,43 @@ public class EditActivity extends Activity implements View.OnClickListener, View
             ((CheckboxLayout) view).getChildAt(0).setVisibility(View.VISIBLE);
         } else {
             addCheckBoxLayout(true, false, null);
+        }
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DEL) {
+            if (((EditText) ((ViewGroup) llEditContent.getFocusedChild()).getChildAt(1)).getText().length() == 0) {
+                removeLayoutOrCheckbox();
+                if (viewList.toString().equals("000")) {
+                    tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color_enabled_false));
+                    tvTitleFinish.setClickable(false);
+                }
+            }
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    private void removeLayoutOrCheckbox() {
+        int position = getFocusedPosition();
+        if (position != -1) {
+            View view = ((ViewGroup) viewList.get(position)).getChildAt(0);
+            if (view instanceof StrokeImageView) {
+                ImageUtils.deleteImagePath(((StrokeImageView) view).picFolderAndName);
+                llEditContent.removeViewAt(position);
+                viewList.remove(position);
+                ((ViewGroup) viewList.get(position - 1)).getChildAt(1).requestFocus();
+            } else {
+                if (view.getVisibility() == View.VISIBLE) {
+                    view.setVisibility(View.GONE);
+                } else {
+                    if (position != 0) {
+                        llEditContent.removeViewAt(position);
+                        viewList.remove(position);
+                        ((ViewGroup) viewList.get(position - 1)).getChildAt(1).requestFocus();
+                    }
+                }
+            }
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.zui.notes;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.zui.notes.adapter.NotesAdapter;
 import com.zui.notes.db.NoteInfoColumns;
 import com.zui.notes.model.NoteInfo;
@@ -41,6 +44,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private DeletePopupWindow deletePopupWindow;
     private int itemCount;
     private boolean selectAll = false;
+    public static final int REQUEST_EXTERNAL_STORAGE_CODE = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,20 @@ public class MainActivity extends Activity implements View.OnClickListener {
         initView();
         initAction();
         initData();
+    }
+
+
+    @Override
+    protected void onResume() {
+        if (this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            this.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_CODE);
+        } else if (this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            this.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_CODE);
+        } else if(this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            this.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_CODE);
+        }
+        super.onResume();
     }
 
     public void initData() {
@@ -143,15 +162,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 notesAdapter.selectAll(selectAll);
                 break;
             case R.id.rl_bottom_delete:
-                deletePopupWindow = new DeletePopupWindow(MainActivity.this,this,itemCount);
-                deletePopupWindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_main), Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
+                deletePopupWindow = new DeletePopupWindow(MainActivity.this, this, itemCount);
+                deletePopupWindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_main), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
             case R.id.btn_add:
-                startActivity(new Intent(MainActivity.this,EditActivity.class));
+                startActivity(new Intent(MainActivity.this, EditActivity.class));
                 break;
             case R.id.tv_pop_delete:
                 deletePopupWindow.dismiss();
-                deletePopupWindow=null;
+                deletePopupWindow = null;
                 notesAdapter.deleteSelected();
             default:
                 break;
@@ -181,7 +200,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             rlNoData.setVisibility(View.VISIBLE);
             tvEdit.setClickable(false);
             tvEdit.setTextColor(MainActivity.this.getResources().getColor(R.color.tv_main_activity_edit_text_color_text_color_enabled_false));
-        }else {
+        } else {
             rlNoData.setVisibility(View.GONE);
             tvEdit.setClickable(true);
             tvEdit.setTextColor(MainActivity.this.getResources().getColor(R.color.tv_main_activity_edit_text_color));
@@ -212,12 +231,27 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
-            if(rlBottomDelete.getVisibility()==View.VISIBLE){
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (rlBottomDelete.getVisibility() == View.VISIBLE) {
                 notesAdapter.setEditMode(false);
                 return true;
             }
         }
-            return super.onKeyDown(keyCode, event);
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_EXTERNAL_STORAGE_CODE) {
+            for (int i = 0; i < grantResults.length; i++) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+            }
+            notesAdapter.notifyDataSetChanged();
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

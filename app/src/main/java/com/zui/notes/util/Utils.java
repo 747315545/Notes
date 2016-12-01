@@ -1,6 +1,8 @@
 package com.zui.notes.util;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.text.format.DateFormat;
 import com.zui.notes.NotesApplication;
@@ -126,8 +128,14 @@ public class Utils {
         return localSimpleDateFormat.format(new Date(paramLong));
     }
 
-    public static String getYearMonth(long paramLong){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy_MM",Locale.getDefault());
-        return simpleDateFormat.format(new Date(paramLong));
+    public static PackageInfo getPackageInfo(Context context, String packageName){
+        PackageInfo packageInfo;
+        try {
+            packageInfo = context.getPackageManager().getPackageInfo(packageName,0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            packageInfo = null;
+        }
+        return packageInfo;
     }
 }

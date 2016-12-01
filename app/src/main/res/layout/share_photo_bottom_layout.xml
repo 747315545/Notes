@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffffff"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2.0px"
+        android:background="#ffe0e0e0" />
+
+    <LinearLayout
+        android:id="@+id/share_btn_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingEnd="40.0dip"
+        android:paddingStart="40.0dip">
+
+        <LinearLayout
+            android:id="@+id/pengyouquan_layout"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/pengyouquan"
+                android:layout_width="32.0dip"
+                android:layout_height="32.0dip"
+                android:src="@drawable/icon_pengyouquan" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/weibo_layout"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/weibo"
+                android:layout_width="32.0dip"
+                android:layout_height="32.0dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/weixin_layout"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/weixin"
+                android:layout_width="32.0dip"
+                android:layout_height="32.0dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/qq_layout"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/qq"
+                android:layout_width="32.0dip"
+                android:layout_height="32.0dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/more"
+                android:layout_width="32.0dip"
+                android:layout_height="32.0dip"
+                android:gravity="center"
+                android:src="@drawable/btn_share_more" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

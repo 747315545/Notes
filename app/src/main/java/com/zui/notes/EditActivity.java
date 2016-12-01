@@ -54,6 +54,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
     private ImageView ivShowBack;
     private TextView tvTitleDate;
     private TextView tvTitleTime;
+    private ImageView ivShare;
     private RelativeLayout rlNewTitle;
     private LinearLayout llEditContent;
     private LinearLayout llContentParent;
@@ -142,6 +143,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         tvTitleDate = (TextView) findViewById(R.id.edit_activity_tv_title_date);
         tvTitleTime = (TextView) findViewById(R.id.edit_activity_tv_title_time);
         rlNewTitle = (RelativeLayout) findViewById(R.id.edit_activity_new_edit);
+        ivShare = (ImageView) findViewById(R.id.edit_activity_iv_share);
         llEditContent = (LinearLayout) findViewById(R.id.ll_edit_content);
         llContentParent = (LinearLayout) findViewById(R.id.ll_content_parent);
         llActivityBottom = (LinearLayout) findViewById(R.id.edit_activity_bottom_ll);
@@ -156,6 +158,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         ivEditBack.setOnClickListener(this);
         tvTitleFinish.setOnClickListener(this);
         ivShowBack.setOnClickListener(this);
+        ivShare.setOnClickListener(this);
         llContentParent.setOnTouchListener(this);
         activityRootView.addOnLayoutChangeListener(this);
         ivDelete.setOnClickListener(this);
@@ -199,6 +202,11 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                         tvTitleTime.setText(Utils.getHourMinute(System.currentTimeMillis()));
                     }
                 }
+                break;
+            case R.id.edit_activity_iv_share:
+                Intent intent = new Intent(EditActivity.this,PhoteShareActivity.class);
+                EditActivity.this.startActivity(intent);
+                EditActivity.this.overridePendingTransition(R.anim.activity_push_in,R.anim.fake_anim);
                 break;
             case R.id.edit_activity_iv_title_show_back_arrow:
                 finish();
@@ -386,11 +394,11 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         if (i / j > 20) f = l * 1.0F / i;
         i = (int) (paramBitmap.getHeight() * 1.0F * f);
         j = getResources().getDimensionPixelSize(R.dimen.add_pic_stroke_width);
-        relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(n * 2 + k, (int) (i * 0.8) + n + m));
+        relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(n * 2 + k, i + n + m));
         final StrokeImageView imageView;
         imageView = new StrokeImageView(this);
         i += j * 2;
-        imageView.setLayoutParams(new RelativeLayout.LayoutParams(k, (int) (i * 0.8)));
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(k, i));
         imageView.setBackgroundColor(getResources().getColor(R.color.pic_bg_color));
         imageView.setImageBitmap(paramBitmap);
         imageView.picFolderAndName = path;
@@ -398,7 +406,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         final EditText editText = new EditText(this);
         editText.setTextSize(i);
         editText.setBackgroundColor(getResources().getColor(R.color.pic_bg_color));
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.add_pic_edit_text_width), (int) (i * 0.8));
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.add_pic_edit_text_width), i);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
         editText.setLayoutParams(layoutParams);
         editText.setBackgroundColor(getResources().getColor(R.color.pic_line_color));

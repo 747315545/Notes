@@ -97,7 +97,7 @@
                 android:focusableInTouchMode="true"
                 android:orientation="vertical"
                 android:padding="@dimen/ev_edit_activity_padding"
-                android:scrollbars="none"/>
+                android:scrollbars="none" />
         </ScrollView>
     </LinearLayout>
 </RelativeLayout>

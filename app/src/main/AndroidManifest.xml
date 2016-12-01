@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zui.notes" >
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    package="com.zui.notes">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".NotesApplication"
         android:allowBackup="true"
@@ -24,7 +26,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".PhotoViewActivity"
-            android:authorities="com.zui.notes" />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PhoteShareActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name=".db.NotesContentProvider"

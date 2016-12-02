@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -27,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.zui.notes.db.NoteInfoColumns;
 import com.zui.notes.model.MyList;
@@ -37,8 +40,8 @@ import com.zui.notes.widget.CheckboxLayout;
 import com.zui.notes.widget.DeletePopupWindow;
 import com.zui.notes.widget.ImageLayout;
 import com.zui.notes.widget.StrokeImageView;
-
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 
@@ -56,6 +59,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
     private TextView tvTitleTime;
     private ImageView ivShare;
     private RelativeLayout rlNewTitle;
+    private ScrollView sv_edit_content;
     private LinearLayout llEditContent;
     private LinearLayout llContentParent;
     private LinearLayout llActivityBottom;
@@ -152,6 +156,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         ivPic = (ImageView) findViewById(R.id.edit_activity_iv_pic);
         ivCamera = (ImageView) findViewById(R.id.edit_activity_iv_camera);
         ivCheck = (ImageView) findViewById(R.id.edit_activity_iv_check);
+        sv_edit_content = (ScrollView) findViewById(R.id.sv_edit_content);
     }
 
     private void initAction() {
@@ -204,7 +209,21 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                 }
                 break;
             case R.id.edit_activity_iv_share:
-                Intent intent = new Intent(EditActivity.this,PhoteShareActivity.class);
+                Bitmap image = loadBitmapFromView(llEditContent);
+                try {
+                    FileOutputStream out = new FileOutputStream(new File(Environment.getExternalStorageDirectory()
+                            .toString()
+                            + File.separator
+                            + "Notes"
+                            + File.separator
+                            + "123.jpg"));
+                    image.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    out.flush();
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Intent intent = new Intent(EditActivity.this,PhotoShareActivity.class);
                 EditActivity.this.startActivity(intent);
                 EditActivity.this.overridePendingTransition(R.anim.activity_push_in,R.anim.fake_anim);
                 break;
@@ -243,6 +262,18 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         }
     }
 
+    public  Bitmap loadBitmapFromView(View v) {
+        int i = v.getWidth();
+        int j = v.getHeight();
+        v.setDrawingCacheEnabled(true);
+        v.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+       v.setDrawingCacheBackgroundColor(-1);
+        Bitmap bmp = Bitmap.createBitmap(i, j, Bitmap.Config.ARGB_8888);
+        Canvas localCanvas = new Canvas(bmp);
+        localCanvas.drawColor(-1);
+        v.draw(localCanvas);
+        return bmp;
+    }
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (getFocusedPosition() == -1) {
@@ -536,6 +567,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                     tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color_enabled_false));
                     tvTitleFinish.setClickable(false);
                 }
+                return true;
             }
         }
         return super.dispatchKeyEvent(event);

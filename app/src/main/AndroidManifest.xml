@@ -28,7 +28,7 @@
             android:name=".PhotoViewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PhoteShareActivity"
+            android:name=".PhotoShareActivity"
             android:screenOrientation="portrait" />
 
         <provider

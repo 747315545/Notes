@@ -3,6 +3,7 @@ package com.zui.notes.util;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 
@@ -53,7 +54,7 @@ public class ImageUtils {
         }
         try {
             FileOutputStream out = new FileOutputStream(file);
-            image.compress(Bitmap.CompressFormat.JPEG, 60, out);
+            image.compress(Bitmap.CompressFormat.JPEG, 30, out);
             out.flush();
             out.close();
             return true;

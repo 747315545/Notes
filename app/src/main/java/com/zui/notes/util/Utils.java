@@ -138,4 +138,11 @@ public class Utils {
         }
         return packageInfo;
     }
+
+    public static int dp2px(Context paramContext, float paramFloat)
+    {
+        return (int)(paramFloat * paramContext.getResources().getDisplayMetrics().density + 0.5F);
+    }
+
+
 }

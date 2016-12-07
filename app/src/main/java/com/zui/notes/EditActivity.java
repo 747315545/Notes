@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import com.zui.notes.db.NoteInfoColumns;
 import com.zui.notes.model.MyList;
 import com.zui.notes.model.NoteInfo;
@@ -40,8 +41,10 @@ import com.zui.notes.widget.CheckboxLayout;
 import com.zui.notes.widget.DeletePopupWindow;
 import com.zui.notes.widget.ImageLayout;
 import com.zui.notes.widget.StrokeImageView;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -59,7 +62,6 @@ public class EditActivity extends Activity implements View.OnClickListener, View
     private TextView tvTitleTime;
     private ImageView ivShare;
     private RelativeLayout rlNewTitle;
-    private ScrollView sv_edit_content;
     private LinearLayout llEditContent;
     private LinearLayout llContentParent;
     private LinearLayout llActivityBottom;
@@ -80,6 +82,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
     private boolean isDeleted = false;
     private File file = null;
     List<View> viewList = new MyList();
+    List<String> picPath = new LinkedList<>();
 
 
     @Override
@@ -156,7 +159,6 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         ivPic = (ImageView) findViewById(R.id.edit_activity_iv_pic);
         ivCamera = (ImageView) findViewById(R.id.edit_activity_iv_camera);
         ivCheck = (ImageView) findViewById(R.id.edit_activity_iv_check);
-        sv_edit_content = (ScrollView) findViewById(R.id.sv_edit_content);
     }
 
     private void initAction() {
@@ -209,23 +211,11 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                 }
                 break;
             case R.id.edit_activity_iv_share:
-                Bitmap image = loadBitmapFromView(llEditContent);
-                try {
-                    FileOutputStream out = new FileOutputStream(new File(Environment.getExternalStorageDirectory()
-                            .toString()
-                            + File.separator
-                            + "Notes"
-                            + File.separator
-                            + "123.jpg"));
-                    image.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                    out.flush();
-                    out.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Intent intent = new Intent(EditActivity.this,PhotoShareActivity.class);
+                Intent intent = new Intent(EditActivity.this, PhotoShareActivity.class);
+                intent.putExtra("data",viewList.toString());
+                intent.putExtra("id",note._id);
                 EditActivity.this.startActivity(intent);
-                EditActivity.this.overridePendingTransition(R.anim.activity_push_in,R.anim.fake_anim);
+                EditActivity.this.overridePendingTransition(R.anim.activity_push_in, R.anim.fake_anim);
                 break;
             case R.id.edit_activity_iv_title_show_back_arrow:
                 finish();
@@ -262,18 +252,6 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         }
     }
 
-    public  Bitmap loadBitmapFromView(View v) {
-        int i = v.getWidth();
-        int j = v.getHeight();
-        v.setDrawingCacheEnabled(true);
-        v.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-       v.setDrawingCacheBackgroundColor(-1);
-        Bitmap bmp = Bitmap.createBitmap(i, j, Bitmap.Config.ARGB_8888);
-        Canvas localCanvas = new Canvas(bmp);
-        localCanvas.drawColor(-1);
-        v.draw(localCanvas);
-        return bmp;
-    }
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (getFocusedPosition() == -1) {
@@ -298,6 +276,10 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                 } else {
                     note.summary = ((MyList) viewList).getList().get(1);
                 }
+                if (!picPath.isEmpty())
+                    note.firstPicPath = picPath.get(0);
+                else
+                    note.firstPicPath = "";
                 insertOrUpdate(note);
             } else {
                 ImageUtils.deleteImagePath(Environment.getExternalStorageDirectory().toString() + File.separator + "Notes" + File.separator + note._id);
@@ -317,6 +299,10 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                 else
                     note.summary = ((MyList) viewList).getList().get(1);
                 note.modifiedTime = System.currentTimeMillis();
+                if (!picPath.isEmpty())
+                    note.firstPicPath = picPath.get(0);
+                else
+                    note.firstPicPath = "";
                 insertOrUpdate(note);
             }
         }
@@ -408,9 +394,6 @@ public class EditActivity extends Activity implements View.OnClickListener, View
 
 
     private void addPicLayout(String path) {
-        if (note.firstPicPath == null || note.firstPicPath == "") {
-            note.firstPicPath = path;
-        }
         Bitmap paramBitmap = BitmapFactory.decodeFile(path);
         final ImageLayout relativeLayout = new ImageLayout(this);
         int n = getResources().getDimensionPixelSize(R.dimen.ev_edit_activity_padding);
@@ -433,6 +416,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         imageView.setBackgroundColor(getResources().getColor(R.color.pic_bg_color));
         imageView.setImageBitmap(paramBitmap);
         imageView.picFolderAndName = path;
+        picPath.add(path);
         relativeLayout.addView(imageView);
         final EditText editText = new EditText(this);
         editText.setTextSize(i);
@@ -578,6 +562,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         if (position != -1) {
             View view = ((ViewGroup) viewList.get(position)).getChildAt(0);
             if (view instanceof StrokeImageView) {
+                picPath.remove(((StrokeImageView) view).picFolderAndName);
                 ImageUtils.deleteImagePath(((StrokeImageView) view).picFolderAndName);
                 llEditContent.removeViewAt(position);
                 viewList.remove(position);

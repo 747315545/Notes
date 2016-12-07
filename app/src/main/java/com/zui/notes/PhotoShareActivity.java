@@ -4,18 +4,23 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zui.notes.util.Utils;
-
+import com.zui.notes.widget.LongPhotoView;
 import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * Created by huangfei on 2016/12/1.
@@ -33,7 +38,9 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
     private ImageView ivWeiXin;
     private ImageView ivQQ;
     private ImageView ivMore;
-    private ImageView share_content;
+    private LongPhotoView mLongPhotoView;
+    private Bitmap image;
+    private Toast toast;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,13 +48,7 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
         initView();
         initAction();
         initBottomBar();
-        Bitmap b = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()
-                .toString()
-                + File.separator
-                + "Notes"
-                + File.separator
-                +"123.jpg");
-        share_content.setImageBitmap(b);
+        image = loadBitmapFromView(mLongPhotoView);
     }
 
     private void initView(){
@@ -62,7 +63,11 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
         ivWeiXin = (ImageView) findViewById(R.id.weixin);
         ivQQ = (ImageView) findViewById(R.id.qq);
         ivMore = (ImageView) findViewById(R.id.more);
-        share_content= (ImageView) findViewById(R.id.share_content);
+        LinearLayout localLinearLayout = (LinearLayout)findViewById(R.id.share_content_container);
+        int i = localLinearLayout.getPaddingLeft();
+        int j = localLinearLayout.getPaddingRight();
+        this.mLongPhotoView = new LongPhotoView(this, getIntent().getStringExtra("data"), ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getWidth() - i - j);
+        localLinearLayout.addView(this.mLongPhotoView);
     }
 
 
@@ -105,8 +110,28 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
                 PhotoShareActivity.this.overridePendingTransition(R.anim.fake_anim, R.anim.activity_push_out);
                 break;
             case R.id.share_photo_save:
+                try {
+                    FileOutputStream out = new FileOutputStream(new File(Environment.getExternalStorageDirectory()
+                            .toString()
+                            + File.separator
+                            + "Notes"
+                            + File.separator
+                            +"cache"
+                            + File.separator
+                            +getIntent().getLongExtra("id",0)
+                            + ".jpg"));
+                    image.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    out.flush();
+                    out.close();
+                    if(toast!=null){
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.pengyouquan:
+                Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), image, null,null));
                 break;
             case R.id.weibo:
                 break;
@@ -118,6 +143,20 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
                 break;
         }
     }
+
+    public  Bitmap loadBitmapFromView(View v) {
+        int i = v.getWidth();
+        int j = v.getHeight();
+        v.setDrawingCacheEnabled(true);
+        v.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        v.setDrawingCacheBackgroundColor(-1);
+        Bitmap bmp = Bitmap.createBitmap(i, j, Bitmap.Config.ARGB_8888);
+        Canvas localCanvas = new Canvas(bmp);
+        localCanvas.drawColor(-1);
+        v.draw(localCanvas);
+        return bmp;
+    }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

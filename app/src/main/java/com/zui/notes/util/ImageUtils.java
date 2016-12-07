@@ -54,7 +54,7 @@ public class ImageUtils {
         }
         try {
             FileOutputStream out = new FileOutputStream(file);
-            image.compress(Bitmap.CompressFormat.JPEG, 30, out);
+            image.compress(Bitmap.CompressFormat.JPEG, 50, out);
             out.flush();
             out.close();
             return true;

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/share_photo_radio_text_space">
+
+    <ImageView
+        android:id="@+id/iv_radio_btn"
+        android:layout_width="@dimen/radio_btn_side_len"
+        android:layout_height="@dimen/radio_btn_side_len"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="1.0dip"
+        android:src="@drawable/checkbox_normal" />
+
+    <TextView
+        android:id="@+id/radio_textview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/radio_text_margin_left"
+        android:layout_marginRight="@dimen/radio_text_margin_right"
+        />
+</LinearLayout>

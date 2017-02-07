@@ -112,7 +112,7 @@ public class LongPhotoView extends LinearLayout {
         TextView textView = (TextView) linearLayout.findViewById(R.id.radio_textview);
         textView.setText(paramString);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-        textView.setTextColor(this.mContext.getColor(R.color.share_photo_text_color));
+        textView.setTextColor(this.mContext.getResources().getColor(R.color.share_photo_text_color));
         textView.setLineSpacing(this.mLineSpacingExtra, this.mLineSpacingMult);
         textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setPadding(0, 0, 0, (int) this.mContext.getResources().getDimension(R.dimen.radio_text_padding_bottom));
@@ -126,7 +126,7 @@ public class LongPhotoView extends LinearLayout {
         addView(view);
         TextView textView = new TextView(this.mContext);
         textView.setGravity(Gravity.CENTER);
-        textView.setTextColor(this.mContext.getColor(R.color.share_photo_slogan_color));
+        textView.setTextColor(this.mContext.getResources().getColor(R.color.share_photo_slogan_color));
         textView.setTextSize(1, 10.0F);
         textView.setText(this.mContext.getString(R.string.share_slogan));
         addView(textView);

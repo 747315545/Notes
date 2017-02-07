@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -145,8 +146,10 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
     }
 
     public  Bitmap loadBitmapFromView(View v) {
-        int i = v.getWidth();
-        int j = v.getHeight();
+        v.measure(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        int i = v.getMeasuredWidth();
+        int j = v.getMeasuredHeight();
+        Log.e("huangfei",""+i+"da"+j);
         v.setDrawingCacheEnabled(true);
         v.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         v.setDrawingCacheBackgroundColor(-1);

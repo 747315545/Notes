@@ -40,7 +40,7 @@
     <string name="pls_open_permission">Accept read/write permissions of Notes in SafeCenter</string>
     <string name="save_failed">Fail to save</string>
     <string name="save_share_photo">Save</string>
-    <string name="save_success">Image saved to /storage/emulated/0/Notes/cache</string>
+    <string name="save_success">Image saved to </string>
     <string name="saving_photo">Saving</string>
     <string name="search">Search</string>
     <string name="select_all">Select all</string>

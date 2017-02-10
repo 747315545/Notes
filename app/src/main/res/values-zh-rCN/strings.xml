@@ -40,7 +40,7 @@
     <string name="pls_open_permission">请在安全中心为便签开启读写相关权限</string>
     <string name="save_failed">保存失败</string>
     <string name="save_share_photo">保存图片</string>
-    <string name="save_success">成功保存至/storage/emulated/0/Notes/cache</string>
+    <string name="save_success">成功保存至</string>
     <string name="saving_photo">正在保存</string>
     <string name="search">搜索</string>
     <string name="select_all">全选</string>

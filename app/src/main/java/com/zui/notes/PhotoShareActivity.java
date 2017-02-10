@@ -1,6 +1,7 @@
 package com.zui.notes;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
@@ -20,8 +21,12 @@ import android.widget.Toast;
 
 import com.zui.notes.util.Utils;
 import com.zui.notes.widget.LongPhotoView;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 
 /**
  * Created by huangfei on 2016/12/1.
@@ -40,16 +45,17 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
     private ImageView ivQQ;
     private ImageView ivMore;
     private LongPhotoView mLongPhotoView;
-    private Bitmap image;
     private Toast toast;
+    private Uri uri = null;
+    private static final String TAG = "PhotoShareActivity" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_photo);
+        toast = null;
         initView();
         initAction();
         initBottomBar();
-        image = loadBitmapFromView(mLongPhotoView);
     }
 
     private void initView(){
@@ -104,7 +110,14 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        int viewId = view.getId();
+        Bitmap image = loadBitmapFromView(mLongPhotoView);
+        Intent shareIntent;
+        ComponentName componentName;
+        if(viewId != R.id.exit_share_cancel && viewId != R.id.share_photo_save){
+            uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), image, null, null));
+        }
+        switch (viewId){
             case R.id.exit_share_cancel:
                 Intent intent = new Intent(PhotoShareActivity.this, EditActivity.class);
                 PhotoShareActivity.this.startActivity(intent);
@@ -112,7 +125,7 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
                 break;
             case R.id.share_photo_save:
                 try {
-                    FileOutputStream out = new FileOutputStream(new File(Environment.getExternalStorageDirectory()
+                    File file = new File(Environment.getExternalStorageDirectory()
                             .toString()
                             + File.separator
                             + "Notes"
@@ -120,36 +133,65 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
                             +"cache"
                             + File.separator
                             +getIntent().getLongExtra("id",0)
-                            + ".jpg"));
+                            + ".jpg");
+                    if (!file.getParentFile().exists()) {
+                        file.getParentFile().mkdirs();
+                    }
+                    FileOutputStream out = new FileOutputStream(file);
                     image.compress(Bitmap.CompressFormat.JPEG, 100, out);
                     out.flush();
                     out.close();
-                    if(toast!=null){
-
+                    if(toast == null){
+                        toast = Toast.makeText(PhotoShareActivity.this,PhotoShareActivity.this.getResources().getText(R.string.save_success)+file.getAbsolutePath(),Toast.LENGTH_LONG);
+                    }else {
+                        toast.setText(PhotoShareActivity.this.getResources().getText(R.string.save_success)+file.getAbsolutePath());
                     }
+                    toast.show();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    if(toast == null){
+                        toast = Toast.makeText(PhotoShareActivity.this,PhotoShareActivity.this.getResources().getText(R.string.save_failed),Toast.LENGTH_LONG);
+                    }else {
+                        toast.setText(PhotoShareActivity.this.getResources().getText(R.string.save_failed));
+                    }
+                    toast.show();
                 }
                 break;
             case R.id.pengyouquan:
-                Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), image, null,null));
+                shareIntent = new Intent(Intent.ACTION_SEND);
+                componentName = new ComponentName(
+                        "com.tencent.mm",
+                        "com.tencent.mm.ui.tools.ShareToTimeLineUI");
+                shareIntent.setComponent(componentName);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                shareIntent.setType("image/*");
+                startActivity(shareIntent);
                 break;
             case R.id.weibo:
                 break;
             case R.id.weixin:
+                shareIntent = new Intent(Intent.ACTION_SEND);
+                componentName = new ComponentName(
+                        "com.tencent.mm",
+                        "com.tencent.mm.ui.tools.ShareImgUI");
+                shareIntent.setComponent(componentName);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                shareIntent.setType("image/*");
+                startActivity(shareIntent);
                 break;
             case R.id.qq:
                 break;
             case R.id.more:
                 break;
         }
+        if(image !=null && !image.isRecycled()){
+            image.recycle();
+        }
     }
 
     public  Bitmap loadBitmapFromView(View v) {
-        v.measure(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-        int i = v.getMeasuredWidth();
-        int j = v.getMeasuredHeight();
-        Log.e("huangfei",""+i+"da"+j);
+        int i = v.getWidth();
+        int j = v.getHeight();
         v.setDrawingCacheEnabled(true);
         v.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         v.setDrawingCacheBackgroundColor(-1);
@@ -169,5 +211,14 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
             PhotoShareActivity.this.overridePendingTransition(R.anim.fake_anim, R.anim.activity_push_out);
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onResume() {
+        if(uri != null) {
+            PhotoShareActivity.this.getContentResolver().delete(uri, null, null);
+            uri = null;
+        }
+        super.onResume();
     }
 }

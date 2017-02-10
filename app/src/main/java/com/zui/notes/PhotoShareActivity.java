@@ -113,7 +113,7 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
         int viewId = view.getId();
         Bitmap image = loadBitmapFromView(mLongPhotoView);
         Intent shareIntent;
-        ComponentName componentName;
+        ComponentName componentName = null;
         if(viewId != R.id.exit_share_cancel && viewId != R.id.share_photo_save){
             uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), image, null, null));
         }
@@ -158,32 +158,36 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
                 }
                 break;
             case R.id.pengyouquan:
-                shareIntent = new Intent(Intent.ACTION_SEND);
                 componentName = new ComponentName(
                         "com.tencent.mm",
                         "com.tencent.mm.ui.tools.ShareToTimeLineUI");
-                shareIntent.setComponent(componentName);
-                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                shareIntent.setType("image/*");
-                startActivity(shareIntent);
                 break;
             case R.id.weibo:
+                componentName = new ComponentName(
+                        "com.sina.weibo",
+                        "com.sina.weibo.composerinde.ComposerDispatchActivity");
                 break;
             case R.id.weixin:
-                shareIntent = new Intent(Intent.ACTION_SEND);
                 componentName = new ComponentName(
                         "com.tencent.mm",
                         "com.tencent.mm.ui.tools.ShareImgUI");
-                shareIntent.setComponent(componentName);
-                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                shareIntent.setType("image/*");
-                startActivity(shareIntent);
                 break;
             case R.id.qq:
+                componentName = new ComponentName(
+                        "com.tencent.mobileqq",
+                        "com.tencent.mobileqq.activity.JumpActivity");
+                Log.e(TAG,componentName+"");
                 break;
             case R.id.more:
                 break;
         }
+        shareIntent = new Intent(Intent.ACTION_SEND);
+        if(componentName!=null) {
+            shareIntent.setComponent(componentName);
+        }
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        shareIntent.setType("image/*");
+        startActivity(shareIntent);
         if(image !=null && !image.isRecycled()){
             image.recycle();
         }

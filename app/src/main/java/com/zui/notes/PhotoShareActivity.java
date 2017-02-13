@@ -113,17 +113,20 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
         int viewId = view.getId();
         Bitmap image = loadBitmapFromView(mLongPhotoView);
         Intent shareIntent;
+        boolean needShare = true;
         ComponentName componentName = null;
         if(viewId != R.id.exit_share_cancel && viewId != R.id.share_photo_save){
             uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), image, null, null));
         }
         switch (viewId){
             case R.id.exit_share_cancel:
+                needShare = false;
                 Intent intent = new Intent(PhotoShareActivity.this, EditActivity.class);
                 PhotoShareActivity.this.startActivity(intent);
                 PhotoShareActivity.this.overridePendingTransition(R.anim.fake_anim, R.anim.activity_push_out);
                 break;
             case R.id.share_photo_save:
+                needShare = false;
                 try {
                     File file = new File(Environment.getExternalStorageDirectory()
                             .toString()
@@ -181,13 +184,15 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
             case R.id.more:
                 break;
         }
-        shareIntent = new Intent(Intent.ACTION_SEND);
-        if(componentName!=null) {
-            shareIntent.setComponent(componentName);
+        if(needShare) {
+            shareIntent = new Intent(Intent.ACTION_SEND);
+            if (componentName != null) {
+                shareIntent.setComponent(componentName);
+            }
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            shareIntent.setType("image/*");
+            startActivity(shareIntent);
         }
-        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        shareIntent.setType("image/*");
-        startActivity(shareIntent);
         if(image !=null && !image.isRecycled()){
             image.recycle();
         }

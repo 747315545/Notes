@@ -27,7 +27,7 @@ public class PhotoViewActivity extends Activity {
         Bitmap bitmap = BitmapFactory.decodeFile(path);
         imageView= (ImageView) findViewById(R.id.iv_activity_photoview);
         imageView.setImageBitmap(bitmap);
-        imageView.setScaleType(ImageView.ScaleType. CENTER_CROP);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

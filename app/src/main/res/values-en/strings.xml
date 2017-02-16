@@ -54,7 +54,7 @@
     <string name="share_dialog_title">Share</string>
     <string name="share_failed">Fail to share</string>
     <string name="share_photo_title">Share</string>
-    <string name="share_slogan">From ZUI Notes</string>
+    <string name="share_slogan">From FLY Notes</string>
     <string name="share_to_friends">Send text to Moments</string>
     <string name="task_is_running_toast">Please click after current task finished</string>
     <string name="too_long_content">Too long to share as an Image</string>

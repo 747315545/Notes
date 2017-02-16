@@ -18,15 +18,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.zui.notes.util.Utils;
 import com.zui.notes.widget.LongPhotoView;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 
 /**
  * Created by huangfei on 2016/12/1.

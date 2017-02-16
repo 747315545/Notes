@@ -54,7 +54,7 @@
     <string name="share_dialog_title">分享</string>
     <string name="share_failed">分享失敗</string>
     <string name="share_photo_title">分享便簽</string>
-    <string name="share_slogan">來自ZUI便簽</string>
+    <string name="share_slogan">來自FLY便簽</string>
     <string name="share_to_friends">發布文字至朋友圈</string>
     <string name="task_is_running_toast">請當前任務結束后再進行操作</string>
     <string name="too_long_content">便簽內容過長，無法以圖片形式分享</string>

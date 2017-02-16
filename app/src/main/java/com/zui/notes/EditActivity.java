@@ -7,15 +7,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,7 +28,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.zui.notes.db.NoteInfoColumns;
@@ -39,11 +37,11 @@ import com.zui.notes.util.ImageUtils;
 import com.zui.notes.util.Utils;
 import com.zui.notes.widget.CheckboxLayout;
 import com.zui.notes.widget.DeletePopupWindow;
+import com.zui.notes.widget.FireworkView;
 import com.zui.notes.widget.ImageLayout;
 import com.zui.notes.widget.StrokeImageView;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -69,6 +67,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
     private ImageView ivPic;
     private ImageView ivCamera;
     private ImageView ivCheck;
+    private FireworkView fireworkView;
     private static final int NEW_MODE = 1;
     private static final int SHOW_MODE = 2;
     private static final int RESULT_CODE = 1;
@@ -80,6 +79,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
     private View activityRootView;
     private DeletePopupWindow deletePopupWindow;
     private boolean isDeleted = false;
+    private boolean fillCompleted = false;
     private File file = null;
     List<View> viewList = new MyList();
     List<String> picPath = new LinkedList<>();
@@ -104,6 +104,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
             llActivityBottom.setVisibility(View.GONE);
         }
         addView();
+        fillCompleted = true;
     }
 
     private void addView() {
@@ -118,7 +119,16 @@ public class EditActivity extends Activity implements View.OnClickListener, View
             fillViewByBody(note.body);
             llEditContent.requestFocus();
         }
-        ((EditText) ((ViewGroup) viewList.get(0)).getChildAt(1)).addTextChangedListener(new TextWatcher() {
+        EditText editText = ((EditText) ((ViewGroup) viewList.get(0)).getChildAt(1));
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    fireworkView.bindEditText((EditText) view);
+                }
+            }
+        });
+        editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -132,6 +142,10 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                 } else {
                     tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color));
                     tvTitleFinish.setClickable(true);
+                }
+                if(fillCompleted) {
+                    float[] coordinate = fireworkView.getCursorCoordinate();
+                    fireworkView.launch(coordinate[0], coordinate[1], i1 == 0 ? -1 : 1);
                 }
             }
 
@@ -159,6 +173,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         ivPic = (ImageView) findViewById(R.id.edit_activity_iv_pic);
         ivCamera = (ImageView) findViewById(R.id.edit_activity_iv_camera);
         ivCheck = (ImageView) findViewById(R.id.edit_activity_iv_check);
+        fireworkView = (FireworkView)findViewById(R.id.fire_work);
     }
 
     private void initAction() {
@@ -425,6 +440,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
         editText.setLayoutParams(layoutParams);
         editText.setBackgroundColor(getResources().getColor(R.color.pic_line_color));
+        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(0)});
         relativeLayout.addView(editText);
         int position = getFocusedPosition();
         viewList.add(position + 1, relativeLayout);
@@ -467,6 +483,33 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                     editText.setTextColor(EditActivity.this.getResources().getColor(R.color.ev_edit_activity_check_text_color));
                 } else {
                     editText.setTextColor(EditActivity.this.getResources().getColor(R.color.ev_edit_activity_text_color));
+                }
+            }
+        });
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(fillCompleted) {
+                    float[] coordinate = fireworkView.getCursorCoordinate();
+                    fireworkView.launch(coordinate[0], coordinate[1], i1 == 0 ? -1 : 1);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    fireworkView.bindEditText((EditText) view);
                 }
             }
         });

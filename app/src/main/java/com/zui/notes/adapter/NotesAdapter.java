@@ -138,7 +138,7 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onMenuClick(int position) {
         context.getContentResolver().delete(Uri.parse("content://com.zui.notes/notes_id"), "_id=?", new String[]{list.get(position)._id + ""});
-        ImageUtils.deleteImagePath(Environment.getExternalStorageDirectory().toString() + File.separator + "Notes" + File.separator + list.get(position)._id);
+        ImageUtils.deleteImagePath(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + list.get(position)._id);
         list.remove(position);
         notifyItemRemoved(position);
         if (list == null || list.isEmpty()) {
@@ -215,7 +215,7 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         for (int i = (isSelected.size() - 1); i >= 0; i--) {
             if (isSelected.get(i)) {
                 strings.add(list.get(i)._id + "");
-                ImageUtils.deleteImagePath(Environment.getExternalStorageDirectory().toString() + File.separator + "Notes" + File.separator + list.get(i)._id);
+                ImageUtils.deleteImagePath(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + list.get(i)._id);
                 list.remove(i);
             }
         }

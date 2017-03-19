@@ -1,4 +1,4 @@
-package com.zui.notes.widget;
+package com.zui.notes.model;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -123,11 +123,11 @@ public class Firework  {
     private static final int[] baseColors = {0xFFFF43,0x00E500,0x44CEF6,0xFF0040,0xFF00FFB7,0x008CFF
             ,0xFF5286,0x562CFF,0x2C9DFF,0x00FFFF,0x00FF77,0x11FF00,0xFFB536,0xFF4618,0xFF334B,0x9CFA18};
 
-    interface AnimationEndListener{
+    public interface AnimationEndListener{
         void onAnimationEnd();
     }
 
-    static class Location{
+    public static class Location{
         public float x;
         public float y;
         public Location(float x, float y){

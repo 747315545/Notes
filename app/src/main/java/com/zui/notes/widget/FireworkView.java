@@ -4,12 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import com.zui.notes.model.Firework;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -26,7 +26,6 @@ public class FireworkView extends View {
     private EditText mEditText;
     private LinkedList<Firework> fireworks = new LinkedList<>();
     private int windSpeed;
-    private TextWatcher mTextWatcher;
 
     public FireworkView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -45,11 +44,6 @@ public class FireworkView extends View {
         this.mEditText = editText;
 
     }
-
-    public void removeBind(){
-        mEditText = null;
-    }
-
 
 
 

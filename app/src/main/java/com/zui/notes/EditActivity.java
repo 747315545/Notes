@@ -15,6 +15,7 @@ import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -123,7 +124,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(b){
+                if (b) {
                     fireworkView.bindEditText((EditText) view);
                 }
             }
@@ -143,7 +144,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                     tvTitleFinish.setTextColor(EditActivity.this.getResources().getColor(R.color.tv_edit_activity_title_finish_text_color));
                     tvTitleFinish.setClickable(true);
                 }
-                if(fillCompleted) {
+                if (fillCompleted) {
                     float[] coordinate = fireworkView.getCursorCoordinate();
                     fireworkView.launch(coordinate[0], coordinate[1], i1 == 0 ? -1 : 1);
                 }
@@ -173,7 +174,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         ivPic = (ImageView) findViewById(R.id.edit_activity_iv_pic);
         ivCamera = (ImageView) findViewById(R.id.edit_activity_iv_camera);
         ivCheck = (ImageView) findViewById(R.id.edit_activity_iv_check);
-        fireworkView = (FireworkView)findViewById(R.id.fire_work);
+        fireworkView = (FireworkView) findViewById(R.id.fire_work);
     }
 
     private void initAction() {
@@ -227,8 +228,8 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                 break;
             case R.id.edit_activity_iv_share:
                 Intent intent = new Intent(EditActivity.this, PhotoShareActivity.class);
-                intent.putExtra("data",viewList.toString());
-                intent.putExtra("id",note._id);
+                intent.putExtra("data", viewList.toString());
+                intent.putExtra("id", note._id);
                 EditActivity.this.startActivity(intent);
                 EditActivity.this.overridePendingTransition(R.anim.activity_push_in, R.anim.fake_anim);
                 break;
@@ -261,7 +262,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                 deletePopupWindow.dismiss();
                 deletePopupWindow = null;
                 getContentResolver().delete(Uri.parse("content://com.zui.notes/notes"), "_id=?", new String[]{note._id + ""});
-                ImageUtils.deleteImagePath(Environment.getExternalStorageDirectory().toString() + File.separator + "Notes" + File.separator + note._id);
+                ImageUtils.deleteImagePath(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + note._id);
                 isDeleted = true;
                 finish();
         }
@@ -269,13 +270,20 @@ public class EditActivity extends Activity implements View.OnClickListener, View
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (getFocusedPosition() == -1) {
-            ((ViewGroup) viewList.get(viewList.size() - 1)).getChildAt(1).requestFocus();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                float x = event.getRawX();
+                float y = event.getRawY();
+                fireworkView.launch(x, y, 1);
+                if (getFocusedPosition() == -1) {
+                    ((ViewGroup) viewList.get(viewList.size() - 1)).getChildAt(1).requestFocus();
+                }
+                if (!isKeyboardShowed) {
+                    inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+                break;
         }
-        if (!isKeyboardShowed) {
-            inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-        }
-        return false;
+        return true;
     }
 
     private void saveData() {
@@ -297,12 +305,12 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                     note.firstPicPath = "";
                 insertOrUpdate(note);
             } else {
-                ImageUtils.deleteImagePath(Environment.getExternalStorageDirectory().toString() + File.separator + "Notes" + File.separator + note._id);
+                ImageUtils.deleteImagePath(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + note._id);
             }
         } else {
             if (viewList.toString().equals("000")) {
                 getContentResolver().delete(Uri.parse("content://com.zui.notes/notes"), "_id=?", new String[]{note._id + ""});
-                ImageUtils.deleteImagePath(Environment.getExternalStorageDirectory().toString() + File.separator + "Notes" + File.separator + note._id);
+                ImageUtils.deleteImagePath(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + note._id);
             } else if (!note.body.equals(viewList.toString())) {
                 note.body = viewList.toString();
                 if (((MyList) viewList).getList().get(0).length() == 3)
@@ -461,10 +469,8 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         if (file != null) {
             return file.getAbsolutePath();
         } else
-            return Environment.getExternalStorageDirectory()
+            return getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                     .toString()
-                    + File.separator
-                    + "Notes"
                     + File.separator
                     + note._id
                     + File.separator
@@ -494,7 +500,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(fillCompleted) {
+                if (fillCompleted) {
                     float[] coordinate = fireworkView.getCursorCoordinate();
                     fireworkView.launch(coordinate[0], coordinate[1], i1 == 0 ? -1 : 1);
                 }
@@ -508,7 +514,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(b){
+                if (b) {
                     fireworkView.bindEditText((EditText) view);
                 }
             }

@@ -1,4 +1,4 @@
-package com.zui.notes.widget;
+package com.zui.notes.model;
 
 /**
  * Created by huangfei on 2017/2/15.

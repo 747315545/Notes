@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.zui.notes.widget.ZoomImageView;
+
 /**
  * Created by huangfei on 2016/11/30.
  */
@@ -25,17 +27,8 @@ public class PhotoViewActivity extends Activity {
         setContentView(R.layout.activity_photeview);
         path = getIntent().getStringExtra("pic_path");
         Bitmap bitmap = BitmapFactory.decodeFile(path);
-        imageView= (ImageView) findViewById(R.id.iv_activity_photoview);
+        imageView= (ZoomImageView) findViewById(R.id.iv_activity_photoview);
         imageView.setImageBitmap(bitmap);
-        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PhotoViewActivity.this,EditActivity.class);
-                startActivity(intent);
-                PhotoViewActivity.this.overridePendingTransition(0,R.anim.center_zoom_out);
-            }
-        });
     }
 
     @Override

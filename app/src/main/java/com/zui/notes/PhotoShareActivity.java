@@ -123,10 +123,8 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
             case R.id.share_photo_save:
                 needShare = false;
                 try {
-                    File file = new File(Environment.getExternalStorageDirectory()
+                    File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                             .toString()
-                            + File.separator
-                            + "Notes"
                             + File.separator
                             +"cache"
                             + File.separator

@@ -201,6 +201,8 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             notifyDataSetChanged();
         } else {
             isEditMode = false;
+            selectCount = 0;
+            mCallBack.setSelectCount(selectCount);
             initHashMapData();
             itemSlideHelper.setEditMode(false);
             notifyDataSetChanged();

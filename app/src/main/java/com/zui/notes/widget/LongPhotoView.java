@@ -39,7 +39,7 @@ public class LongPhotoView extends LinearLayout {
         int contentPaddingLeft = ((int) this.mContext.getResources().getDimension(R.dimen.content_padding_left));
         int contentPaddingRight = ((int) this.mContext.getResources().getDimension(R.dimen.content_padding_right));
         int contentPaddingTop = ((int) this.mContext.getResources().getDimension(R.dimen.content_padding_top));
-        setBackground(this.mContext.getDrawable(R.drawable.long_photo_view_bg));
+        setBackground(this.mContext.getResources().getDrawable(R.drawable.long_photo_view_bg));
         LinearLayout.LayoutParams localLayoutParams = (LinearLayout.LayoutParams) getLayoutParams();
         if (localLayoutParams == null) {
             localLayoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -102,9 +102,9 @@ public class LongPhotoView extends LinearLayout {
         if(isShow){
             imageView.setVisibility(VISIBLE);
             if (isChecked) {
-                imageView.setImageDrawable(this.mContext.getDrawable(R.drawable.checkbox_pressed));
+                imageView.setImageDrawable(this.mContext.getResources().getDrawable(R.drawable.checkbox_pressed));
             }else {
-                imageView.setImageDrawable(this.mContext.getDrawable(R.drawable.checkbox_normal));
+                imageView.setImageDrawable(this.mContext.getResources().getDrawable(R.drawable.checkbox_normal));
             }
         }else {
             imageView.setVisibility(GONE);
@@ -115,7 +115,7 @@ public class LongPhotoView extends LinearLayout {
         textView.setTextColor(this.mContext.getResources().getColor(R.color.share_photo_text_color));
         textView.setLineSpacing(this.mLineSpacingExtra, this.mLineSpacingMult);
         textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        textView.setPadding(0, 0, 0, (int) this.mContext.getResources().getDimension(R.dimen.radio_text_padding_bottom));
+        textView.setPadding((int) this.mContext.getResources().getDimension(R.dimen.radio_text_padding_bottom),(int) this.mContext.getResources().getDimension(R.dimen.radio_text_padding_top),0,0);
         addView(linearLayout);
     }
 

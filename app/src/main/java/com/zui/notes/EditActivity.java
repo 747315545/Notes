@@ -61,6 +61,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
     private TextView tvTitleTime;
     private ImageView ivShare;
     private RelativeLayout rlNewTitle;
+    private RelativeLayout rlShowTitle;
     private LinearLayout llEditContent;
     private LinearLayout llContentParent;
     private LinearLayout llActivityBottom;
@@ -99,9 +100,11 @@ public class EditActivity extends Activity implements View.OnClickListener, View
             mode = NEW_MODE;
             fillNote();
             llActivityBottom.setVisibility(View.VISIBLE);
+            rlShowTitle.setVisibility(View.GONE);
         } else {
             mode = SHOW_MODE;
             rlNewTitle.setVisibility(View.GONE);
+            rlShowTitle.setVisibility(View.VISIBLE);
             llActivityBottom.setVisibility(View.GONE);
         }
         addView();
@@ -165,6 +168,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
         tvTitleDate = (TextView) findViewById(R.id.edit_activity_tv_title_date);
         tvTitleTime = (TextView) findViewById(R.id.edit_activity_tv_title_time);
         rlNewTitle = (RelativeLayout) findViewById(R.id.edit_activity_new_edit);
+        rlShowTitle = (RelativeLayout) findViewById(R.id.edit_activity_title_show);
         ivShare = (ImageView) findViewById(R.id.edit_activity_iv_share);
         llEditContent = (LinearLayout) findViewById(R.id.ll_edit_content);
         llContentParent = (LinearLayout) findViewById(R.id.ll_content_parent);
@@ -215,6 +219,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                 ((ViewGroup) viewList.get(0)).getChildAt(1).requestFocus();
                 llEditContent.requestFocus();
                 rlNewTitle.setVisibility(View.GONE);
+                rlShowTitle.setVisibility(View.VISIBLE);
                 llActivityBottom.setVisibility(View.GONE);
                 if (mode == NEW_MODE) {
                     tvTitleDate.setText(Utils.getYearMonthDay(System.currentTimeMillis()));
@@ -241,7 +246,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
                 deletePopupWindow.showAtLocation(EditActivity.this.findViewById(R.id.rl_edit_activity), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
             case R.id.edit_activity_iv_pic:
-                Intent intentForPic = new Intent("android.intent.action.PICK", null);
+                Intent intentForPic = new Intent();
                 intentForPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 intentForPic.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(intentForPic, RESULT_CODE);
@@ -361,6 +366,7 @@ public class EditActivity extends Activity implements View.OnClickListener, View
             if (llActivityBottom.getVisibility() != View.VISIBLE)
                 llActivityBottom.setVisibility(View.VISIBLE);
             rlNewTitle.setVisibility(View.VISIBLE);
+            rlShowTitle.setVisibility(View.GONE);
             if (mode == SHOW_MODE) {
                 tvTitle.setText(EditActivity.this.getResources().getString(R.string.edit_note));
             } else {

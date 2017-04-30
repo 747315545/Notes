@@ -111,7 +111,7 @@ public class PhotoShareActivity extends Activity implements View.OnClickListener
         boolean needShare = true;
         ComponentName componentName = null;
         if(viewId != R.id.exit_share_cancel && viewId != R.id.share_photo_save){
-            uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), image, null, null));
+            uri = Uri.parse(MediaStore.Images.Media.insertImage(PhotoShareActivity.this.getContentResolver(), image, null, null));
         }
         switch (viewId){
             case R.id.exit_share_cancel:

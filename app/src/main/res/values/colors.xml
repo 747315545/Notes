@@ -22,6 +22,7 @@
     <color name="button_material_light">#ffd6d7d7</color>
     <color name="colorAccent">#ffff4081</color>
     <color name="colorPrimary">#ff3f51b5</color>
+    <color name="coloryellow">#ffF2C75F</color>
     <color name="colorPrimaryDark">#ff303f9f</color>
     <color name="dialog_bg">#fffafafa</color>
     <color name="dialog_item_bg_active">#0d191919</color>

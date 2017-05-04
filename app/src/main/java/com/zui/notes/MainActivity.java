@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -22,10 +23,17 @@ import android.widget.TextView;
 import com.zui.notes.adapter.NotesAdapter;
 import com.zui.notes.db.NoteInfoColumns;
 import com.zui.notes.model.NoteInfo;
+import com.zui.notes.widget.CustomDrawerLayout;
 import com.zui.notes.widget.DeletePopupWindow;
 import java.util.LinkedList;
 import java.util.List;
 import android.widget.Toast;
+
+import at.markushi.ui.ActionView;
+import at.markushi.ui.action.BackAction;
+import at.markushi.ui.action.DrawerAction;
+import com.nineoldandroids.view.ViewHelper;
+import com.zui.notes.widget.MultiShapeView;
 
 /**
  * Created by huangfei on 2016/11/9.
@@ -42,7 +50,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private RelativeLayout rlNoData;
     private RecyclerView notesList;
     private Button addButton;
+    private ActionView actionView;
+    private CustomDrawerLayout customDrawerLayout;
     private NotesAdapter notesAdapter;
+    private MultiShapeView userIcon;
     private List<NoteInfo> list;
     private Uri uri;
     private DataFailedObserver observer;
@@ -120,6 +131,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         tvEdit.setClickable(false);
         tvEdit.setTextColor(MainActivity.this.getResources().getColor(R.color.tv_main_activity_edit_text_color_text_color_enabled_false));
         fillDataForDatabase();
+        userIcon.setImageResource(R.drawable.add);
     }
 
     public void initView() {
@@ -132,7 +144,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         ivBottomDelete = (ImageView) findViewById(R.id.iv_bottom_delete);
         rlNoData = (RelativeLayout) findViewById(R.id.rl_activity_main_no_data);
         addButton = (Button) findViewById(R.id.btn_add);
+        actionView = (ActionView) findViewById(R.id.action);
+        customDrawerLayout = (CustomDrawerLayout) findViewById(R.id.drawerlayout);
         notesList = (RecyclerView) findViewById(R.id.notes_list);
+        userIcon = (MultiShapeView) findViewById(R.id.user_ico);
     }
 
 
@@ -142,6 +157,64 @@ public class MainActivity extends Activity implements View.OnClickListener {
         titleSelectAll.setOnClickListener(this);
         rlBottomDelete.setOnClickListener(this);
         addButton.setOnClickListener(this);
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int type = actionView.getAction() instanceof BackAction ? 1 : 0;
+                switch (type){
+                    case 1:
+                        customDrawerLayout.closeDrawers();
+                        break;
+                    case 0:
+                        customDrawerLayout.openDrawer(Gravity.LEFT);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        customDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                View mContent = customDrawerLayout.getChildAt(0);
+                View mMenu = drawerView;
+                float scale = 1 - slideOffset;
+                float rightScale = 0.8f + scale * 0.2f;
+
+
+                    float leftScale = 1 - 0.3f * scale;
+
+                    ViewHelper.setScaleX(mMenu, leftScale);
+                    ViewHelper.setScaleY(mMenu, leftScale);
+                    ViewHelper.setAlpha(mMenu, 0.6f + 0.4f * (1 - scale));
+                    ViewHelper.setTranslationX(mContent,
+                            mMenu.getMeasuredWidth() * (1 - scale));
+                    ViewHelper.setPivotX(mContent, 0);
+                    ViewHelper.setPivotY(mContent,
+                            mContent.getMeasuredHeight() / 2);
+                    mContent.invalidate();
+                    ViewHelper.setScaleX(mContent, rightScale);
+                    ViewHelper.setScaleY(mContent, rightScale);
+
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                actionView.setAction(new BackAction(), ActionView.ROTATE_COUNTER_CLOCKWISE);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                actionView.setAction(new DrawerAction(), ActionView.ROTATE_COUNTER_CLOCKWISE);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
     }
 
     @Override

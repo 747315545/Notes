@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:background="@color/title_bg"
+<RelativeLayout android:background="@color/title_bg"
     android:layout_width="match_parent"
     android:layout_height="@dimen/rl_title_height"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <at.markushi.ui.ActionView
+        android:id="@+id/action"
+        android:layout_width="30.0dp"
+        android:layout_centerVertical="true"
+        android:layout_height="30.0dp"
+        app:av_color="@android:color/black"
+        app:av_action="drawer"
+        />
     <TextView
         android:textSize="@dimen/tv_title_text_size"
         android:textColor="@color/title_text_black_color"

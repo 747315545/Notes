@@ -4,6 +4,12 @@
     <string name="add_pic_fail">无法添加图片</string>
     <string name="app_name">便签</string>
     <string name="cancel">取消</string>
+    <string name="upload">上传本地记录到云端</string>
+    <string name="download">下载云端记录到本地</string>
+    <string name="login">登录账号</string>
+    <string name="logout">注销账号</string>
+    <string name="lock">设置应用密码</string>
+    <string name="about">关于此应用</string>
     <string name="choose_item">选择项目</string>
     <string name="confirm_delete_file">确定要删除这个便签吗?</string>
     <string name="confirm_delete_items">确定要删除这%1$d个便签吗?</string>

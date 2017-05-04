@@ -16,70 +16,89 @@
             android:id="@+id/title_edit_mode"
             android:visibility="gone"
             layout="@layout/title_main_edit_mode" />
-    </RelativeLayout>
-    <View
-        android:id="@+id/view_title"
-        android:background="#ffd6d6d6"
-        android:layout_width="fill_parent"
-        android:layout_height="2.0px"
-        android:layout_below="@id/title_rl" />
-    <RelativeLayout
-        android:id="@+id/rl_bottom_delete"
-        android:background="@drawable/btn_bottom_delete"
-        android:visibility="gone"
-        android:clickable="true"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/tv_bottom_delete_height"
-        android:layout_alignParentBottom="true">
-        <ImageView
-            android:gravity="center"
-            android:id="@+id/iv_bottom_delete"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/delete_disable"
-            android:layout_centerInParent="true" />
         <View
-            android:background="@color/view_bottom_delete_bg"
+            android:id="@+id/view_title"
+            android:background="#ffd6d6d6"
             android:layout_width="fill_parent"
             android:layout_height="2.0px"
-            android:layout_alignParentTop="true" />
+            android:layout_below="@id/title" />
     </RelativeLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/notes_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/view_title"
-        android:layout_above="@id/rl_bottom_delete"
-        />
-    <RelativeLayout
-        android:id="@+id/rl_activity_main_no_data"
+    <com.zui.notes.widget.CustomDrawerLayout
+        android:id="@+id/drawerlayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/rl_activity_main_no_data_margin_top"
-        android:layout_below="@id/view_title"
-        android:layout_centerHorizontal="true">
-        <ImageView
-            android:id="@+id/iv_activity_main_no_data"
-            android:layout_width="@dimen/iv_activity_main_no_data_width"
-            android:layout_height="@dimen/iv_activity_main_no_data_height"
-            android:src="@drawable/no_note" />
-        <TextView
-            android:textSize="@dimen/tv_activity_main_no_data_text_size"
-            android:textColor="@color/tv_activity_main_no_data_text_color"
-            android:id="@+id/tv_activity_main_no_data"
+        android:layout_below="@id/title_rl">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:id="@+id/rl_bottom_delete"
+                android:background="@drawable/btn_bottom_delete"
+                android:visibility="gone"
+                android:clickable="true"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/tv_bottom_delete_height"
+                android:layout_alignParentBottom="true">
+                <ImageView
+                    android:gravity="center"
+                    android:id="@+id/iv_bottom_delete"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/delete_disable"
+                    android:layout_centerInParent="true" />
+                <View
+                    android:background="@color/view_bottom_delete_bg"
+                    android:layout_width="fill_parent"
+                    android:layout_height="2.0px"
+                    android:layout_alignParentTop="true" />
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/notes_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/rl_bottom_delete"
+                />
+            <RelativeLayout
+                android:id="@+id/rl_activity_main_no_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/rl_activity_main_no_data_margin_top"
+                android:layout_centerHorizontal="true">
+                <ImageView
+                    android:id="@+id/iv_activity_main_no_data"
+                    android:layout_width="@dimen/iv_activity_main_no_data_width"
+                    android:layout_height="@dimen/iv_activity_main_no_data_height"
+                    android:src="@drawable/no_note" />
+                <TextView
+                    android:textSize="@dimen/tv_activity_main_no_data_text_size"
+                    android:textColor="@color/tv_activity_main_no_data_text_color"
+                    android:id="@+id/tv_activity_main_no_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_data"
+                    android:layout_below="@id/iv_activity_main_no_data"
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+            <Button
+                android:layout_gravity="bottom"
+                android:id="@+id/btn_add"
+                android:background="@drawable/btn_add"
+                android:layout_width="@dimen/btn_add_width"
+                android:layout_height="@dimen/btn_add_height"
+                android:layout_marginBottom="@dimen/btn_add_margin_bottom"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/drawercontent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_data"
-            android:layout_below="@id/iv_activity_main_no_data"
-            android:layout_centerHorizontal="true" />
-    </RelativeLayout>
-    <Button
-        android:layout_gravity="bottom"
-        android:id="@+id/btn_add"
-        android:background="@drawable/btn_add"
-        android:layout_width="@dimen/btn_add_width"
-        android:layout_height="@dimen/btn_add_height"
-        android:layout_marginBottom="@dimen/btn_add_margin_bottom"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+            android:layout_gravity="start"
+            android:clickable="true">
+           <include
+               android:id="@+id/ll_drawercontent"
+               layout="@layout/content_drawer"/>
+        </RelativeLayout>
+    </com.zui.notes.widget.CustomDrawerLayout>
+
 </RelativeLayout>

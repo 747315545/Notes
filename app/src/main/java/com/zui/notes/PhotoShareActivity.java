@@ -27,7 +27,7 @@ import java.io.FileOutputStream;
  * Created by huangfei on 2016/12/1.
  */
 
-public class PhotoShareActivity extends Activity implements View.OnClickListener {
+public class PhotoShareActivity extends BaseActivity implements View.OnClickListener {
     private TextView tvShareCancel;
     private TextView tvPhotoSave;
     private LinearLayout llPengYouQuan;

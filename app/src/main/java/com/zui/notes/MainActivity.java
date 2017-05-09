@@ -1,7 +1,6 @@
 package com.zui.notes;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
@@ -18,20 +17,26 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.zui.notes.adapter.NotesAdapter;
+import com.zui.notes.db.Config;
 import com.zui.notes.db.NoteInfoColumns;
 import com.zui.notes.model.NoteInfo;
 import com.zui.notes.widget.CustomDrawerLayout;
 import com.zui.notes.widget.DeletePopupWindow;
+
 import java.util.LinkedList;
 import java.util.List;
+
 import android.widget.Toast;
 
 import at.markushi.ui.ActionView;
 import at.markushi.ui.action.BackAction;
 import at.markushi.ui.action.DrawerAction;
+
 import com.nineoldandroids.view.ViewHelper;
 import com.zui.notes.widget.MultiShapeView;
 
@@ -39,15 +44,24 @@ import com.zui.notes.widget.MultiShapeView;
  * Created by huangfei on 2016/11/9.
  */
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
     private TextView tvEdit;
     private TextView titleCancel;
     private TextView selectTitle;
     private TextView titleSelectAll;
+    private TextView textLock;
+    private TextView textLogin;
+    private ImageView imageLock;
+    private ImageView imageLogin;
     private RelativeLayout rlEditModeTitle;
     private RelativeLayout rlBottomDelete;
     private ImageView ivBottomDelete;
     private RelativeLayout rlNoData;
+    private LinearLayout llLock;
+    private LinearLayout llLogin;
+    private LinearLayout llupload;
+    private LinearLayout lldownload;
+    private LinearLayout llabout;
     private RecyclerView notesList;
     private Button addButton;
     private ActionView actionView;
@@ -61,11 +75,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private int itemCount;
     private boolean selectAll = false;
     public static final int REQUEST_EXTERNAL_STORAGE_CODE = 1;
+    private static final int REQUEST_CODE_LOCK = 2;
+    private static final int REQUEST_CODE_LOGIN = 3;
+    private NotesApplication myApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        myApp = NotesApplication.getInstance();
         initView();
         initAction();
         initData();
@@ -73,7 +91,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onResume() {
-        if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                     this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 this.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_CODE);
@@ -131,7 +149,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         tvEdit.setClickable(false);
         tvEdit.setTextColor(MainActivity.this.getResources().getColor(R.color.tv_main_activity_edit_text_color_text_color_enabled_false));
         fillDataForDatabase();
-        userIcon.setImageResource(R.drawable.add);
+        userIcon.setImageResource(R.drawable.userico);
+        changeStatus();
     }
 
     public void initView() {
@@ -148,6 +167,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
         customDrawerLayout = (CustomDrawerLayout) findViewById(R.id.drawerlayout);
         notesList = (RecyclerView) findViewById(R.id.notes_list);
         userIcon = (MultiShapeView) findViewById(R.id.user_ico);
+        llLock = (LinearLayout) findViewById(R.id.ll_lock);
+        textLock = (TextView) findViewById(R.id.tv_lock);
+        imageLock = (ImageView) findViewById(R.id.ima_lock);
+        llLogin = (LinearLayout) findViewById(R.id.ll_login_logout);
+        textLogin = (TextView) findViewById(R.id.tv_login);
+        imageLogin = (ImageView) findViewById(R.id.ima_login);
+        llupload = (LinearLayout) findViewById(R.id.ll_upload);
+        lldownload = (LinearLayout) findViewById(R.id.ll_download);
+        llabout = (LinearLayout) findViewById(R.id.ll_about);
     }
 
 
@@ -157,11 +185,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
         titleSelectAll.setOnClickListener(this);
         rlBottomDelete.setOnClickListener(this);
         addButton.setOnClickListener(this);
+        llLock.setOnClickListener(this);
+        llLogin.setOnClickListener(this);
+        llupload.setOnClickListener(this);
+        lldownload.setOnClickListener(this);
+        llabout.setOnClickListener(this);
         actionView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int type = actionView.getAction() instanceof BackAction ? 1 : 0;
-                switch (type){
+                switch (type) {
                     case 1:
                         customDrawerLayout.closeDrawers();
                         break;
@@ -180,23 +213,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 View mMenu = drawerView;
                 float scale = 1 - slideOffset;
                 float rightScale = 0.8f + scale * 0.2f;
-
-
-                    float leftScale = 1 - 0.3f * scale;
-
-                    ViewHelper.setScaleX(mMenu, leftScale);
-                    ViewHelper.setScaleY(mMenu, leftScale);
-                    ViewHelper.setAlpha(mMenu, 0.6f + 0.4f * (1 - scale));
-                    ViewHelper.setTranslationX(mContent,
-                            mMenu.getMeasuredWidth() * (1 - scale));
-                    ViewHelper.setPivotX(mContent, 0);
-                    ViewHelper.setPivotY(mContent,
-                            mContent.getMeasuredHeight() / 2);
-                    mContent.invalidate();
-                    ViewHelper.setScaleX(mContent, rightScale);
-                    ViewHelper.setScaleY(mContent, rightScale);
-
-
+                float leftScale = 1 - 0.3f * scale;
+                ViewHelper.setScaleX(mMenu, leftScale);
+                ViewHelper.setScaleY(mMenu, leftScale);
+                ViewHelper.setAlpha(mMenu, 0.6f + 0.4f * (1 - scale));
+                ViewHelper.setTranslationX(mContent,
+                        mMenu.getMeasuredWidth() * (1 - scale));
+                ViewHelper.setPivotX(mContent, 0);
+                ViewHelper.setPivotY(mContent,
+                        mContent.getMeasuredHeight() / 2);
+                mContent.invalidate();
+                ViewHelper.setScaleX(mContent, rightScale);
+                ViewHelper.setScaleY(mContent, rightScale);
             }
 
             @Override
@@ -240,20 +268,65 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 notesAdapter.selectAll(selectAll);
                 break;
             case R.id.rl_bottom_delete:
-                deletePopupWindow = new DeletePopupWindow(MainActivity.this,this,itemCount);
-                deletePopupWindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_main), Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
+                deletePopupWindow = new DeletePopupWindow(MainActivity.this, this, itemCount);
+                deletePopupWindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_main), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
             case R.id.btn_add:
-                startActivity(new Intent(MainActivity.this,EditActivity.class));
+                startActivity(new Intent(MainActivity.this, EditActivity.class));
                 break;
             case R.id.tv_pop_delete:
                 deletePopupWindow.dismiss();
-                deletePopupWindow=null;
+                deletePopupWindow = null;
                 notesAdapter.deleteSelected();
+                break;
+            case R.id.ll_lock:
+                toSetLock();
+                break;
+            case R.id.ll_login_logout:
+                toLogin();
+                break;
+            case R.id.ll_upload:
+                break;
+            case R.id.ll_download:
+                break;
+            case R.id.ll_about:
+                break;
             default:
                 break;
         }
 
+    }
+
+    private void toSetLock() {
+        Intent intent;
+        if (myApp.getSettings() == null || "".equals(myApp.getSettings().getGesture())) {
+            intent = new Intent(MainActivity.this, LockOnActivity.class);
+        } else {
+            intent = new Intent(MainActivity.this, LockOffActivity.class);
+        }
+        startActivityForResult(intent, REQUEST_CODE_LOCK);
+    }
+
+    private void changeStatus() {
+        if (myApp.getSettings() == null || "".equals(myApp.getSettings().getGesture())) {
+            textLock.setText(R.string.lockon);
+            imageLock.setImageResource(R.drawable.lockon);
+        } else {
+            textLock.setText(R.string.lockoff);
+            imageLock.setImageResource(R.drawable.lockoff);
+        }
+    }
+
+    /**
+     * 存手势设置
+     */
+    private void savePattern() {
+        Config.setGestureSettings(myApp.getSettings());
+    }
+
+    private void toLogin() {
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivityForResult(intent,REQUEST_CODE_LOGIN);
     }
 
     private void fillDataForDatabase() {
@@ -278,7 +351,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             rlNoData.setVisibility(View.VISIBLE);
             tvEdit.setClickable(false);
             tvEdit.setTextColor(MainActivity.this.getResources().getColor(R.color.tv_main_activity_edit_text_color_text_color_enabled_false));
-        }else {
+        } else {
             rlNoData.setVisibility(View.GONE);
             tvEdit.setClickable(true);
             tvEdit.setTextColor(MainActivity.this.getResources().getColor(R.color.tv_main_activity_edit_text_color));
@@ -304,6 +377,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         MainActivity.this.getContentResolver().unregisterContentObserver(observer);
+        myApp.setLockTime(0);
         super.onDestroy();
     }
 
@@ -320,10 +394,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if(requestCode==REQUEST_EXTERNAL_STORAGE_CODE){
-            for(int i=0;i<grantResults.length;i++){
-                if(grantResults[i]!=PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(MainActivity.this,"Permission Denied",Toast.LENGTH_SHORT).show();
+        if (requestCode == REQUEST_EXTERNAL_STORAGE_CODE) {
+            for (int i = 0; i < grantResults.length; i++) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
                     finish();
                     return;
                 }
@@ -332,4 +406,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_CODE_LOCK:
+                if (resultCode == RESULT_OK) {
+                    changeStatus();
+                    savePattern();
+                }
+                break;
+            case REQUEST_CODE_LOGIN:
+                break;
+            default:
+                break;
+        }
+    }
+
 }

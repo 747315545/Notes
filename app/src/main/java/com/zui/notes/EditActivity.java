@@ -51,7 +51,7 @@ import java.util.List;
  * Created by huangfei on 2016/11/9.
  */
 
-public class EditActivity extends Activity implements View.OnClickListener, View.OnTouchListener, View.OnLayoutChangeListener {
+public class EditActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener, View.OnLayoutChangeListener {
     private NoteInfo note;
     private ImageView ivEditBack;
     private TextView tvTitle;

@@ -29,4 +29,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.1.0'
     compile 'com.github.markushi:android-ui:1.2'
     compile 'com.nineoldandroids:library:2.4.0'
+    compile 'cn.bmob.android:bmob-sdk:3.5.5'
 }

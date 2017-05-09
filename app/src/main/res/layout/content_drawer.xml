@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.0dp"
         android:layout_weight="2"
+        android:clickable="false"
         android:background="@color/coloryellow">
         <com.zui.notes.widget.MultiShapeView
             android:id="@+id/user_ico"
@@ -23,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.0dp"
         android:layout_weight="3"
+        android:focusable="false"
         android:background="@color/title_bg"
         android:orientation="vertical">
         <LinearLayout
@@ -30,7 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="62.0dp"
             android:orientation="horizontal"
-            android:layout_marginTop="20.0dp">
+            android:layout_marginTop="20.0dp"
+            android:background="@drawable/btn_mune">
 
             <ImageView
                 android:layout_width="80.0dp"
@@ -39,7 +42,7 @@
                 android:layout_gravity="center"
                 />
 
-            <Button
+            <TextView
                 android:text="@string/upload"
                 android:gravity="center_vertical|start"
                 android:textSize="15.0sp"
@@ -53,14 +56,15 @@
             android:id="@+id/ll_download"
             android:layout_width="match_parent"
             android:layout_height="62.0dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@drawable/btn_mune">
             <ImageView
                 android:layout_width="80.0dp"
                 android:layout_height="40.0dp"
                 android:src="@drawable/download"
                 android:layout_gravity="center" />
 
-            <Button
+            <TextView
                 android:text="@string/download"
                 android:gravity="center_vertical|start"
                 android:textSize="15.0sp"
@@ -74,14 +78,17 @@
             android:id="@+id/ll_lock"
             android:layout_width="match_parent"
             android:layout_height="62.0dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@drawable/btn_mune">
             <ImageView
+                android:id="@+id/ima_lock"
                 android:layout_width="80.0dp"
                 android:layout_height="40.0dp"
-                android:src="@drawable/lock"
+                android:src="@drawable/lockon"
                 android:layout_gravity="center" />
-            <Button
-                android:text="@string/lock"
+            <TextView
+                android:id="@+id/tv_lock"
+                android:text="@string/lockon"
                 android:gravity="center_vertical|start"
                 android:textSize="15.0sp"
                 android:textColor="@color/item_tv_title_text_color"
@@ -94,13 +101,14 @@
             android:id="@+id/ll_about"
             android:layout_width="match_parent"
             android:layout_height="62.0dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@drawable/btn_mune">
             <ImageView
                 android:layout_width="80.0dp"
                 android:layout_height="40.0dp"
                 android:src="@drawable/about"
                 android:layout_gravity="center" />
-            <Button
+            <TextView
                 android:text="@string/about"
                 android:gravity="center_vertical|start"
                 android:textSize="15.0sp"
@@ -115,14 +123,16 @@
         android:layout_width="match_parent"
         android:layout_height="62.0dp"
         android:layout_gravity="bottom"
-        android:background="@color/title_bg"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@drawable/btn_mune">
         <ImageView
+            android:id="@+id/ima_login"
             android:layout_width="80.0dp"
             android:layout_height="40.0dp"
             android:src="@drawable/login"
             android:layout_gravity="center" />
-        <Button
+        <TextView
+            android:id="@+id/tv_login"
             android:text="@string/login"
             android:gravity="center_vertical|start"
             android:textSize="15.0sp"

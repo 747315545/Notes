@@ -10,4 +10,20 @@
         <attr name="cover_color" format="color" />
         <attr name="round_radius" format="dimension"/>
     </declare-styleable>
+
+    <attr name="color_no_finger_inner_circle" format="color" />
+    <attr name="color_no_finger_outer_circle" format="color" />
+    <attr name="color_finger_on" format="color" />
+    <attr name="color_finger_wrong" format="color" />
+    <attr name="count" format="integer" />
+    <attr name="tryTimes" format="integer" />
+
+    <declare-styleable name="GestureLockViewGroup">
+        <attr name="color_no_finger_inner_circle" />
+        <attr name="color_no_finger_outer_circle" />
+        <attr name="color_finger_on" />
+        <attr name="color_finger_wrong" />
+        <attr name="count" />
+        <attr name="tryTimes" />
+    </declare-styleable>
 </resources>

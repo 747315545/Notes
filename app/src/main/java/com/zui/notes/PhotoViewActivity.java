@@ -16,7 +16,7 @@ import com.zui.notes.widget.ZoomImageView;
  * Created by huangfei on 2016/11/30.
  */
 
-public class PhotoViewActivity extends Activity {
+public class PhotoViewActivity extends BaseActivity {
     private ImageView imageView;
     private String path;
     @Override

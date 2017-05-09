@@ -41,7 +41,7 @@ public class MultiShapeView extends View {
     private int mCoverColor;
     private static final int DEFAULT_BORDER_WIDTH = 0;
     private static final int DEFAULT_BORDER_COLOR = Color.TRANSPARENT;
-    private static final int DEFAULT_COVER_COLOR = Color.parseColor("#40333333");
+    private static final int DEFAULT_COVER_COLOR = Color.TRANSPARENT;
     private static final int DEFAULT_ROUND_RADIUS = 0;
     public static final int SHAPE_REC = 1;
     public static final int SHAPE_CIRCLE = 2;
@@ -185,35 +185,23 @@ public class MultiShapeView extends View {
     }
 
     @Override
-    public void setPressed(boolean pressed) {
-        super.setPressed(pressed);
-        if (mIsPressed == pressed) {
-            return;
-        }
-        mIsPressed = pressed;
-        if (mIsPressed) {
-            mBitmapPaint.setColorFilter(new PorterDuffColorFilter(mCoverColor, PorterDuff.Mode.SRC_ATOP));
-        } else {
-            mBitmapPaint.setColorFilter(null);
-        }
-        invalidate();
-    }
-
-    @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getActionMasked();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                setPressed(true);
+                if(mRcBitmap.contains(event.getX(), event.getY())) {
+                    mBitmapPaint.setColorFilter(new PorterDuffColorFilter(mCoverColor, PorterDuff.Mode.SRC_ATOP));
+                }else {
+                    mBitmapPaint.setColorFilter(null);
+                }
+                invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (!mRcBitmap.contains(event.getX(), event.getY())) {
-                    setPressed(false);
-                }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                setPressed(false);
+                mBitmapPaint.setColorFilter(null);
+                invalidate();
                 break;
         }
         return true;

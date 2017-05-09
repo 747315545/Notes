@@ -30,7 +30,19 @@
         <activity
             android:name=".PhotoShareActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".LockActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LockOnActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LockOffActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <provider
             android:name=".db.NotesContentProvider"
             android:authorities="com.zui.notes" />

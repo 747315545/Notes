@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zui.notes.widget.CheckboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.fly.notes.widget.CheckboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -26,4 +26,4 @@
         android:textColor="@color/ev_edit_activity_text_color"
         android:textCursorDrawable="@drawable/edit_cursor"
         android:textSize="@dimen/ev_edit_activity_text_size" />
-</com.zui.notes.widget.CheckboxLayout>
+</com.fly.notes.widget.CheckboxLayout>

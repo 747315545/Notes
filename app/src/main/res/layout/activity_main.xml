@@ -23,7 +23,7 @@
             android:layout_height="2.0px"
             android:layout_below="@id/title" />
     </RelativeLayout>
-    <com.zui.notes.widget.CustomDrawerLayout
+    <com.fly.notes.widget.CustomDrawerLayout
         android:id="@+id/drawerlayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -99,6 +99,6 @@
                android:id="@+id/ll_drawercontent"
                layout="@layout/content_drawer"/>
         </RelativeLayout>
-    </com.zui.notes.widget.CustomDrawerLayout>
+    </com.fly.notes.widget.CustomDrawerLayout>
 
 </RelativeLayout>

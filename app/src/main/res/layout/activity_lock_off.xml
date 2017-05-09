@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.zui.notes.LockOffActivity">
+    tools:context="com.fly.notes.LockOffActivity">
 
     <TextView
         android:id="@+id/tv_prompt_lock_off"
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.zui.notes.widget.GestureLockViewGroup
+    <com.fly.notes.widget.GestureLockViewGroup
         android:id="@+id/gesture_lock_view_group_lock_off"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

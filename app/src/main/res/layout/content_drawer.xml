@@ -10,7 +10,7 @@
         android:layout_weight="2"
         android:clickable="false"
         android:background="@color/coloryellow">
-        <com.zui.notes.widget.MultiShapeView
+        <com.fly.notes.widget.MultiShapeView
             android:id="@+id/user_ico"
             android:layout_width="100.0dp"
             android:layout_height="100.0dp"

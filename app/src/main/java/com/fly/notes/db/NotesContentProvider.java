@@ -19,8 +19,8 @@ public class NotesContentProvider extends ContentProvider {
     SQLiteDatabase db;
 
     static {
-        uriMatcher.addURI("com.zui.notes", "notes", CRUD);
-        uriMatcher.addURI("com.zui.notes","notes_id",DELETEITEM);
+        uriMatcher.addURI("com.fly.notes", "notes", CRUD);
+        uriMatcher.addURI("com.fly.notes","notes_id",DELETEITEM);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class NotesContentProvider extends ContentProvider {
             case DELETEITEM:
                 long result = db.delete(TABLENAME,selection,selectionArgs);
                 if(result==-1){
-                    this.getContext().getContentResolver().notifyChange(Uri.parse("content://com.zui.notes/notes"),null);
+                    this.getContext().getContentResolver().notifyChange(Uri.parse("content://com.fly.notes/notes"),null);
                 }
         }
         return 0;

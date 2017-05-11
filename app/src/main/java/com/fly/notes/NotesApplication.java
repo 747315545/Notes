@@ -25,11 +25,9 @@ public class NotesApplication extends Application {
     public static NotesApplication getInstance() {
         return mInstance;
     }
-    /** ----------------------- 一些公共的变量 ------------------------- */
-    private long lockTime = 0; // 保存的是最近一次调用onPause()的系统时间
-    private Setting settings;  // 手势设置
+    private long lockTime = 0;
+    private Setting settings;
 
-    /** ----------------------- 一些set/get方法 ------------------------- */
     public long getLockTime() {
         return lockTime;
     }

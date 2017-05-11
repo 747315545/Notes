@@ -137,7 +137,7 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onMenuClick(int position) {
-        context.getContentResolver().delete(Uri.parse("content://com.zui.notes/notes_id"), "_id=?", new String[]{list.get(position)._id + ""});
+        context.getContentResolver().delete(Uri.parse("content://com.fly.notes/notes_id"), "_id=?", new String[]{list.get(position)._id + ""});
         ImageUtils.deleteImagePath(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + list.get(position)._id);
         list.remove(position);
         notifyItemRemoved(position);
@@ -221,7 +221,7 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 list.remove(i);
             }
         }
-        context.getContentResolver().delete(Uri.parse("content://com.zui.notes/notes"), "_id=?", strings.toArray(new String[strings.size()]));
+        context.getContentResolver().delete(Uri.parse("content://com.fly.notes/notes"), "_id=?", strings.toArray(new String[strings.size()]));
         setEditMode(false);
         if (list == null || list.isEmpty()) {
             mCallBack.showNoData();

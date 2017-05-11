@@ -38,6 +38,8 @@
     <color name="edit_cursor_color">#ff1499f7</color>
     <color name="ev_edit_activity_check_text_color">#ffcccccc</color>
     <color name="ev_edit_activity_text_color">#ff333333</color>
+    <color name="transparent">#00000000</color>
+    <color name="color_border">#66666666</color>
     <color name="foreground_material_dark">@android:color/white</color>
     <color name="foreground_material_light">@android:color/black</color>
     <color name="highlighted_text_material_dark">#6680cbc4</color>

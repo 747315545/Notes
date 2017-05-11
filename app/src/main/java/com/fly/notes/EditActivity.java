@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -14,6 +15,7 @@ import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -257,14 +259,19 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
                 Intent intentForCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intentForCamera.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intentForCamera.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-                Uri uri = FileProvider.getUriForFile(EditActivity.this, "com.zui.notes.fileProvider", file);
+                Uri uri;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    uri = FileProvider.getUriForFile(EditActivity.this, "com.fly.notes.fileProvider", file);
+                }else {
+                    uri = Uri.fromFile(file);
+                }
                 intentForCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intentForCamera, CODE_CAMERA);
                 break;
             case R.id.tv_pop_delete:
                 deletePopupWindow.dismiss();
                 deletePopupWindow = null;
-                getContentResolver().delete(Uri.parse("content://com.zui.notes/notes"), "_id=?", new String[]{note._id + ""});
+                getContentResolver().delete(Uri.parse("content://com.fly.notes/notes"), "_id=?", new String[]{note._id + ""});
                 ImageUtils.deleteImagePath(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + note._id);
                 isDeleted = true;
                 finish();
@@ -312,7 +319,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
             }
         } else {
             if (viewList.toString().equals("000")) {
-                getContentResolver().delete(Uri.parse("content://com.zui.notes/notes"), "_id=?", new String[]{note._id + ""});
+                getContentResolver().delete(Uri.parse("content://com.fly.notes/notes"), "_id=?", new String[]{note._id + ""});
                 ImageUtils.deleteImagePath(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + note._id);
             } else if (!note.body.equals(viewList.toString())) {
                 note.body = viewList.toString();
@@ -343,9 +350,9 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
         contentValues.put(NoteInfoColumns.SUMMARY, note.summary);
         contentValues.put(NoteInfoColumns.FIRST_PIC_PATH, note.firstPicPath);
         if (mode == NEW_MODE) {
-            getContentResolver().insert(Uri.parse("content://com.zui.notes/notes"), contentValues);
+            getContentResolver().insert(Uri.parse("content://com.fly.notes/notes"), contentValues);
         } else {
-            getContentResolver().update(Uri.parse("content://com.zui.notes/notes"), contentValues, "_id=?", new String[]{note._id + ""});
+            getContentResolver().update(Uri.parse("content://com.fly.notes/notes"), contentValues, "_id=?", new String[]{note._id + ""});
         }
     }
 
@@ -359,7 +366,9 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+        Log.d("huangfei","onLayoutChange");
         if (oldBottom != 0 && bottom != 0 && (oldBottom - bottom > keyHeight)) {
+            Log.d("huangfei","onLayoutChange1");
             isKeyboardShowed = true;
             if (llActivityBottom.getVisibility() != View.VISIBLE)
                 llActivityBottom.setVisibility(View.VISIBLE);
@@ -378,6 +387,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
                 tvTitleFinish.setClickable(true);
             }
         } else if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > keyHeight)) {
+            Log.d("huangfei","onLayoutChange2");
             isKeyboardShowed = false;
         }
     }
@@ -394,7 +404,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
                 if (!file.getParentFile().exists()) {
                     file.getParentFile().mkdirs();
                 }
-                if (ImageUtils.SmallBitmap(getRealPath(uri), k, file)) {
+                if (ImageUtils.SmallBitmap(ImageUtils.getImageAbsolutePath(EditActivity.this,uri), k, file)) {
                     addPicLayout(getSavePath());
                     addCheckBoxLayout(false, false, null);
                     if (mode == NEW_MODE) {
@@ -562,19 +572,6 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
                 }
             }
         }
-    }
-
-    private String getRealPath(Uri uri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        String path = "";
-        Cursor cursor = getContentResolver().query(uri, proj, null, null, null);
-        if (cursor != null) {
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            path = cursor.getString(column_index);
-            cursor.close();
-        }
-        return path;
     }
 
     private int getFocusedPosition() {

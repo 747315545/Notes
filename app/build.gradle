@@ -4,7 +4,7 @@ android {
     compileSdkVersion 24
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.zui.notes"
+        applicationId "com.fly.notes"
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
@@ -20,6 +20,7 @@ android {
 }
 
 dependencies {
+    compile 'cn.bmob.android:bmob-sdk:3.5.5'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -29,5 +30,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.1.0'
     compile 'com.github.markushi:android-ui:1.2'
     compile 'com.nineoldandroids:library:2.4.0'
-    compile 'cn.bmob.android:bmob-sdk:3.5.5'
+    compile 'com.eftimoff:android-pathview:1.0.8@aar'
+    compile 'com.wrapp.floatlabelededittext:library:0.0.6'
 }

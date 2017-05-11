@@ -5,16 +5,29 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,10 +37,14 @@ import android.widget.TextView;
 import com.fly.notes.adapter.NotesAdapter;
 import com.fly.notes.db.Config;
 import com.fly.notes.db.NoteInfoColumns;
+import com.fly.notes.db.NotesUser;
 import com.fly.notes.model.NoteInfo;
+import com.fly.notes.util.ImageUtils;
+import com.fly.notes.util.ToastUtil;
 import com.fly.notes.widget.CustomDrawerLayout;
 import com.fly.notes.widget.DeletePopupWindow;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,7 +55,7 @@ import at.markushi.ui.action.BackAction;
 import at.markushi.ui.action.DrawerAction;
 
 import com.nineoldandroids.view.ViewHelper;
-import com.fly.notes.widget.MultiShapeView;
+import com.fly.notes.widget.CircleImageView;
 
 /**
  * Created by huangfei on 2016/11/9.
@@ -51,6 +68,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private TextView titleSelectAll;
     private TextView textLock;
     private TextView textLogin;
+    private TextView userName;
     private ImageView imageLock;
     private ImageView imageLogin;
     private RelativeLayout rlEditModeTitle;
@@ -67,7 +85,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ActionView actionView;
     private CustomDrawerLayout customDrawerLayout;
     private NotesAdapter notesAdapter;
-    private MultiShapeView userIcon;
+    private CircleImageView userIcon;
     private List<NoteInfo> list;
     private Uri uri;
     private DataFailedObserver observer;
@@ -78,6 +96,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final int REQUEST_CODE_LOCK = 2;
     private static final int REQUEST_CODE_LOGIN = 3;
     private NotesApplication myApp;
+    private AlertDialog photoDialog;
+    public static final String PHOTO_IMAGE_FILE_NAME = "fileImg.jpg";
+    public static final int CAMERA_REQUEST_CODE = 100;
+    public static final int IMAGE_REQUEST_CODE = 101;
+    public static final int RESULT_REQUEST_CODE = 102;
+    private static final int REQUEST_BLUETOOTH_PERMISSION = 10;
+    private File tempFile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +112,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initView();
         initAction();
         initData();
+        checkLogin();
     }
 
     @Override
@@ -105,7 +131,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void initData() {
-        uri = Uri.parse("content://com.zui.notes/notes");
+        uri = Uri.parse("content://com.fly.notes/notes");
         list = new LinkedList<>();
         observer = new DataFailedObserver(new Handler());
         MainActivity.this.getContentResolver().registerContentObserver(uri, true, observer);
@@ -149,7 +175,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         tvEdit.setClickable(false);
         tvEdit.setTextColor(MainActivity.this.getResources().getColor(R.color.tv_main_activity_edit_text_color_text_color_enabled_false));
         fillDataForDatabase();
-        userIcon.setImageResource(R.drawable.userico);
         changeStatus();
     }
 
@@ -166,7 +191,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         actionView = (ActionView) findViewById(R.id.action);
         customDrawerLayout = (CustomDrawerLayout) findViewById(R.id.drawerlayout);
         notesList = (RecyclerView) findViewById(R.id.notes_list);
-        userIcon = (MultiShapeView) findViewById(R.id.user_ico);
+        userIcon = (CircleImageView) findViewById(R.id.user_ico);
         llLock = (LinearLayout) findViewById(R.id.ll_lock);
         textLock = (TextView) findViewById(R.id.tv_lock);
         imageLock = (ImageView) findViewById(R.id.ima_lock);
@@ -176,6 +201,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         llupload = (LinearLayout) findViewById(R.id.ll_upload);
         lldownload = (LinearLayout) findViewById(R.id.ll_download);
         llabout = (LinearLayout) findViewById(R.id.ll_about);
+        userName = (TextView) findViewById(R.id.tv_username);
     }
 
 
@@ -190,6 +216,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         llupload.setOnClickListener(this);
         lldownload.setOnClickListener(this);
         llabout.setOnClickListener(this);
+        userIcon.setOnClickListener(this);
         actionView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -279,11 +306,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 deletePopupWindow = null;
                 notesAdapter.deleteSelected();
                 break;
+            case R.id.user_ico:
+                if (NotesUser.getCurrentUser(NotesUser.class) != null) {
+                    showDialog();
+                }else {
+                    ToastUtil.INSTANCE.makeToast(MainActivity.this,getResources().getText(R.string.usericotext));
+                }
+                break;
             case R.id.ll_lock:
                 toSetLock();
                 break;
             case R.id.ll_login_logout:
-                toLogin();
+                if (NotesUser.getCurrentUser(NotesUser.class) == null) {
+                    toLogin();
+                } else {
+                    toLogout();
+                }
                 break;
             case R.id.ll_upload:
                 break;
@@ -296,6 +334,82 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
 
     }
+
+    private void showDialog() {
+        photoDialog = new AlertDialog.Builder(MainActivity.this).create();
+        photoDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        photoDialog.show();
+        Window window = photoDialog.getWindow();
+        window.setContentView(R.layout.dialog_photo);
+        window.setGravity(Gravity.BOTTOM);
+        window.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparent)));
+        window.setWindowAnimations(R.style.popupWindowAnim);
+        WindowManager.LayoutParams lp = photoDialog.getWindow().getAttributes();
+        DisplayMetrics dm = new DisplayMetrics();
+        window.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        lp.width = dm.widthPixels;
+        photoDialog.getWindow().setAttributes(lp);
+
+        photoDialog.findViewById(R.id.btn_camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toCamera();
+            }
+        });
+        photoDialog.findViewById(R.id.btn_picture).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toPicture();
+            }
+        });
+        photoDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                photoDialog.dismiss();
+            }
+        });
+    }
+
+    public void toCamera() {
+        requestWESPermission();
+        photoDialog.dismiss();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), PHOTO_IMAGE_FILE_NAME)));
+        startActivityForResult(intent, CAMERA_REQUEST_CODE);
+    }
+
+    /**
+     * 跳转相册
+     */
+    private void toPicture() {
+        photoDialog.dismiss();
+        Intent intent = new Intent(Intent.ACTION_PICK, null);
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(intent, IMAGE_REQUEST_CODE);
+    }
+
+    /**
+     * 裁剪
+     *
+     * @param uri
+     */
+    private void startPhotoZoom(Uri uri) {
+        if (uri == null) {
+            Log.e("", "裁剪uri == null");
+            return;
+        }
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 320);
+        intent.putExtra("outputY", 320);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, RESULT_REQUEST_CODE);
+    }
+
 
     private void toSetLock() {
         Intent intent;
@@ -326,7 +440,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void toLogin() {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        startActivityForResult(intent,REQUEST_CODE_LOGIN);
+        startActivityForResult(intent, REQUEST_CODE_LOGIN);
+    }
+
+    private void toLogout() {
+        NotesUser.logOut();
+        checkLogin();
     }
 
     private void fillDataForDatabase() {
@@ -392,6 +511,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return super.onKeyDown(keyCode, event);
     }
 
+    private void requestWESPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                    Toast.makeText(MainActivity.this, "Need write external storage permission.", Toast.LENGTH_SHORT).show();
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_BLUETOOTH_PERMISSION);
+                return;
+            } else {
+            }
+        } else {
+        }
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == REQUEST_EXTERNAL_STORAGE_CODE) {
@@ -417,11 +551,49 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     savePattern();
                 }
                 break;
-            case REQUEST_CODE_LOGIN:
+            case IMAGE_REQUEST_CODE:
+                if (data != null) {
+                    startPhotoZoom(data.getData());
+                }
+                break;
+            case CAMERA_REQUEST_CODE:
+                tempFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), PHOTO_IMAGE_FILE_NAME);
+                startPhotoZoom(Uri.fromFile(tempFile));
+                break;
+            case RESULT_REQUEST_CODE:
+                if (data != null) {
+                    Bundle bundle = data.getExtras();
+                    if (bundle != null) {
+                        final Bitmap bitmap = bundle.getParcelable("data");
+                        tempFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), PHOTO_IMAGE_FILE_NAME);
+                        userIcon.setImageBitmap(bitmap);
+                    }
+                    // 拿到图片设置, 然后需要删除tempFile
+                    //setImageToView(data);
+                }
                 break;
             default:
                 break;
         }
     }
 
+    private void checkLogin() {
+        NotesUser notesUser = NotesUser.getCurrentUser(NotesUser.class);
+        if (notesUser != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + PHOTO_IMAGE_FILE_NAME);
+            if (bitmap != null) {
+                userIcon.setImageBitmap(bitmap);
+            } else {
+                userIcon.setImageResource(R.drawable.userico);
+            }
+            userName.setText(notesUser.getUsername());
+            textLogin.setText(R.string.logout);
+            imageLogin.setImageResource(R.drawable.logout);
+        } else {
+            userIcon.setImageResource(R.drawable.userico);
+            userName.setText(R.string.nouser);
+            textLogin.setText(R.string.login);
+            imageLogin.setImageResource(R.drawable.login);
+        }
+    }
 }

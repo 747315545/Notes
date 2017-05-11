@@ -8,7 +8,7 @@ import com.fly.notes.db.Config;
 
 
 public class BaseActivity extends AppCompatActivity {
-    private static final String TAG = BaseActivity.class.getSimpleName();
+    protected static final String TAG = BaseActivity.class.getSimpleName();
 
     private Context mContext;
     private NotesApplication myApp;

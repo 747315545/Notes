@@ -1,10 +1,12 @@
 package com.fly.notes;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -14,6 +16,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -31,16 +34,21 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fly.notes.adapter.NotesAdapter;
 import com.fly.notes.db.Config;
+import com.fly.notes.db.DataBaseHelper;
+import com.fly.notes.db.NoteChangeType;
 import com.fly.notes.db.NoteInfoColumns;
 import com.fly.notes.db.NotesUser;
 import com.fly.notes.model.NoteInfo;
+import com.fly.notes.util.DownloadUtil;
 import com.fly.notes.util.ImageUtils;
 import com.fly.notes.util.ToastUtil;
+import com.fly.notes.util.UploadUtil;
 import com.fly.notes.widget.CustomDrawerLayout;
 import com.fly.notes.widget.DeletePopupWindow;
 
@@ -53,6 +61,12 @@ import android.widget.Toast;
 import at.markushi.ui.ActionView;
 import at.markushi.ui.action.BackAction;
 import at.markushi.ui.action.DrawerAction;
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
 
 import com.nineoldandroids.view.ViewHelper;
 import com.fly.notes.widget.CircleImageView;
@@ -71,6 +85,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private TextView userName;
     private ImageView imageLock;
     private ImageView imageLogin;
+    private ProgressBar progressUpload;
+    private ProgressBar progressDownload;
     private RelativeLayout rlEditModeTitle;
     private RelativeLayout rlBottomDelete;
     private ImageView ivBottomDelete;
@@ -94,7 +110,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private boolean selectAll = false;
     public static final int REQUEST_EXTERNAL_STORAGE_CODE = 1;
     private static final int REQUEST_CODE_LOCK = 2;
-    private static final int REQUEST_CODE_LOGIN = 3;
     private NotesApplication myApp;
     private AlertDialog photoDialog;
     public static final String PHOTO_IMAGE_FILE_NAME = "fileImg.jpg";
@@ -103,6 +118,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public static final int RESULT_REQUEST_CODE = 102;
     private static final int REQUEST_BLUETOOTH_PERMISSION = 10;
     private File tempFile = null;
+    List<BmobObject> noteInfos;
+    private UploadUtil uploadUtil;
+    private DownloadUtil downloadUtil;
+    private MyHandler handler;
+    private final static String NOTESCHANGETABLENAME = "notesChange";
+    private static final int TIME_INTERVAL = 2000;
+    private long mBackPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +134,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initView();
         initAction();
         initData();
-        checkLogin();
     }
 
     @Override
@@ -127,12 +148,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 this.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_CODE);
             }
         }
+        checkLogin();
         super.onResume();
     }
 
     public void initData() {
         uri = Uri.parse("content://com.fly.notes/notes");
         list = new LinkedList<>();
+        handler = new MyHandler();
+        uploadUtil = new UploadUtil(MainActivity.this, handler);
+        downloadUtil = new DownloadUtil(MainActivity.this, handler);
         observer = new DataFailedObserver(new Handler());
         MainActivity.this.getContentResolver().registerContentObserver(uri, true, observer);
         notesList.setLayoutManager(new LinearLayoutManager(MainActivity.this));
@@ -202,6 +227,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         lldownload = (LinearLayout) findViewById(R.id.ll_download);
         llabout = (LinearLayout) findViewById(R.id.ll_about);
         userName = (TextView) findViewById(R.id.tv_username);
+        progressUpload = (ProgressBar) findViewById(R.id.progress_upload);
+        progressDownload = (ProgressBar) findViewById(R.id.progress_download);
     }
 
 
@@ -309,8 +336,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.user_ico:
                 if (NotesUser.getCurrentUser(NotesUser.class) != null) {
                     showDialog();
-                }else {
-                    ToastUtil.INSTANCE.makeToast(MainActivity.this,getResources().getText(R.string.usericotext));
+                } else {
+                    ToastUtil.INSTANCE.makeToast(MainActivity.this, getResources().getText(R.string.usericotext));
                 }
                 break;
             case R.id.ll_lock:
@@ -324,8 +351,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.ll_upload:
+                if (NotesUser.getCurrentUser(NotesUser.class) != null) {
+                    toUpload();
+                } else {
+                    ToastUtil.INSTANCE.makeToast(MainActivity.this, getResources().getText(R.string.usericotext));
+                }
                 break;
             case R.id.ll_download:
+                if (NotesUser.getCurrentUser(NotesUser.class) != null) {
+                    toDownload();
+                } else {
+                    ToastUtil.INSTANCE.makeToast(MainActivity.this, getResources().getText(R.string.usericotext));
+                }
                 break;
             case R.id.ll_about:
                 break;
@@ -440,28 +477,47 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void toLogin() {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        startActivityForResult(intent, REQUEST_CODE_LOGIN);
+        startActivity(intent);
     }
 
     private void toLogout() {
         NotesUser.logOut();
+        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), PHOTO_IMAGE_FILE_NAME);
+        if (file.exists()) {
+            file.delete();
+        }
+        DataBaseHelper dataBaseHelper = new DataBaseHelper(MainActivity.this);
+        SQLiteDatabase db = dataBaseHelper.getWritableDatabase();
+        db.delete(NOTESCHANGETABLENAME, null, null);
+        Cursor cursor = MainActivity.this.getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(cursor.getColumnIndex(NoteInfoColumns._ID));
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(NoteInfoColumns._ID, id);
+                contentValues.put(NoteInfoColumns.CHANGETYPE, NoteChangeType.ADD);
+                db.insert(NOTESCHANGETABLENAME, null, contentValues);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
         checkLogin();
     }
 
     private void fillDataForDatabase() {
         list.clear();
         Cursor cursor = MainActivity.this.getContentResolver().query(uri, null, null, null, NoteInfoColumns.MODIFIED_TIME + " DESC");
-        if (cursor != null && cursor.getCount() != 0) {
-            while (cursor.moveToNext()) {
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
                 NoteInfo noteInfo = new NoteInfo();
-                noteInfo._id = cursor.getLong(cursor.getColumnIndex(NoteInfoColumns._ID));
+                noteInfo.id = cursor.getLong(cursor.getColumnIndex(NoteInfoColumns._ID));
                 noteInfo.body = cursor.getString(cursor.getColumnIndex(NoteInfoColumns.BODY));
                 noteInfo.modifiedTime = cursor.getLong(cursor.getColumnIndex(NoteInfoColumns.MODIFIED_TIME));
                 noteInfo.title = cursor.getString(cursor.getColumnIndex(NoteInfoColumns.TITLE));
                 noteInfo.summary = cursor.getString(cursor.getColumnIndex(NoteInfoColumns.SUMMARY));
                 noteInfo.firstPicPath = cursor.getString(cursor.getColumnIndex(NoteInfoColumns.FIRST_PIC_PATH));
                 list.add(noteInfo);
-            }
+            } while (cursor.moveToNext());
             cursor.close();
         }
         notesAdapter.setList(list);
@@ -562,18 +618,49 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case RESULT_REQUEST_CODE:
                 if (data != null) {
-                    Bundle bundle = data.getExtras();
-                    if (bundle != null) {
-                        final Bitmap bitmap = bundle.getParcelable("data");
-                        tempFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), PHOTO_IMAGE_FILE_NAME);
-                        userIcon.setImageBitmap(bitmap);
-                    }
-                    // 拿到图片设置, 然后需要删除tempFile
-                    //setImageToView(data);
+                    setImageToView(data);
                 }
                 break;
             default:
                 break;
+        }
+    }
+
+
+    private void setImageToView(Intent data) {
+        Bundle bundle = data.getExtras();
+        if (bundle != null) {
+            final Bitmap bitmap = bundle.getParcelable("data");
+            tempFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), PHOTO_IMAGE_FILE_NAME);
+            ImageUtils.compressImage(bitmap, tempFile);
+            final BmobFile bmobFile = new BmobFile(tempFile);
+            bmobFile.uploadblock(new UploadFileListener() {
+                @Override
+                public void done(BmobException e) {
+                    if (e == null) {
+                        NotesUser user = BmobUser.getCurrentUser(NotesUser.class);
+                        user.setAvatar(bmobFile);
+                        user.update(new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e == null) {
+                                    userIcon.setImageBitmap(bitmap);
+                                    ToastUtil.INSTANCE.makeToast(MainActivity.this, getResources().getText(R.string.avatar_editor_success));
+                                } else {
+                                    ToastUtil.INSTANCE.makeToast(MainActivity.this, getResources().getText(R.string.avatar_editor_failure));
+                                }
+                            }
+                        });
+                    } else {
+                        ToastUtil.INSTANCE.makeToast(MainActivity.this, getResources().getText(R.string.avatar_editor_failure));
+                    }
+                }
+
+                @Override
+                public void onProgress(Integer value) {
+                    super.onProgress(value);
+                }
+            });
         }
     }
 
@@ -594,6 +681,111 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             userName.setText(R.string.nouser);
             textLogin.setText(R.string.login);
             imageLogin.setImageResource(R.drawable.login);
+        }
+    }
+
+    private void toUpload() {
+        progressUpload.setVisibility(View.VISIBLE);
+        lldownload.setClickable(false);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                handler.init();
+                noteInfos = uploadUtil.getChangeList(NoteChangeType.ADD);
+                handler.setAddMax(noteInfos.size());
+                uploadUtil.insertBatch(noteInfos);
+                noteInfos = uploadUtil.getChangeList(NoteChangeType.UPDATE);
+                handler.setUpdateMax(noteInfos.size());
+                uploadUtil.updateBatch(noteInfos);
+                noteInfos = uploadUtil.getChangeList(NoteChangeType.DELETE);
+                handler.setDeleteMax(noteInfos.size());
+                uploadUtil.deleteBatch(noteInfos);
+                if (handler.deleteMax + handler.addMax + handler.updateMax == 0) {
+                    handler.sendEmptyMessage(-1);
+                }
+            }
+        }).start();
+    }
+
+    private void toDownload() {
+        progressDownload.setVisibility(View.VISIBLE);
+        llupload.setClickable(false);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                downloadUtil.downloadBatch();
+            }
+        }).start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
+            super.onBackPressed();
+            return;
+        } else {
+            ToastUtil.INSTANCE.makeToast(MainActivity.this,getResources().getText(R.string.toastback));
+        }
+        mBackPressed = System.currentTimeMillis();
+    }
+
+    private class MyHandler extends Handler {
+        int addCount = 0;
+        int updateCount = 0;
+        int deleteCount = 0;
+        int addMax;
+        int updateMax;
+        int deleteMax;
+
+        public void init() {
+            addCount = 0;
+            updateCount = 0;
+            deleteCount = 0;
+        }
+
+        public void setAddMax(int addMax) {
+            this.addMax = addMax;
+        }
+
+        public void setUpdateMax(int updateMax) {
+            this.updateMax = updateMax;
+        }
+
+        public void setDeleteMax(int deleteMax) {
+            this.deleteMax = deleteMax;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case NoteChangeType.ADD:
+                    addCount++;
+                    break;
+                case NoteChangeType.UPDATE:
+                    updateCount++;
+                    break;
+                case NoteChangeType.DELETE:
+                    deleteCount++;
+                    break;
+                case -1:
+                    progressUpload.setVisibility(View.INVISIBLE);
+                    progressDownload.setVisibility(View.INVISIBLE);
+                    lldownload.setClickable(true);
+                    llupload.setClickable(true);
+                    break;
+                case -2:
+                    addMax = msg.arg1;
+                    updateMax = 0;
+                    deleteMax = 0;
+                    break;
+            }
+            if (addCount + updateCount + deleteCount == addMax + updateMax + deleteMax) {
+                progressUpload.setVisibility(View.INVISIBLE);
+                progressDownload.setVisibility(View.INVISIBLE);
+                lldownload.setClickable(true);
+                llupload.setClickable(true);
+            }
+            super.handleMessage(msg);
         }
     }
 }

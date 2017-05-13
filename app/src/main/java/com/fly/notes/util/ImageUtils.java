@@ -17,6 +17,8 @@ import android.provider.MediaStore;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by huangfei on 2016/11/21.
@@ -187,6 +189,20 @@ public class ImageUtils {
      */
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+
+    public static List<String> getImageList(String s){
+        List<String> list = new ArrayList<>();
+        if (s.length() > 2) {
+            String[] str = s.split(":");
+            for (int i = 0; i < str.length; i++) {
+                if (str[i].charAt(0) == '1') {
+                    list.add(str[i].substring(1));
+                }
+            }
+        }
+        return list;
     }
 
 }

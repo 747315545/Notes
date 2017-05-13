@@ -9,5 +9,6 @@ public abstract interface NoteInfoColumns
     public static final String MODIFIED_TIME = "modifiedTime";
     public static final String TITLE = "title";
     public static final String SUMMARY = "summary";
-    public static final String _ID = "_id";
+    public static final String _ID = "id";
+    public static final String CHANGETYPE = "changeType";
 }

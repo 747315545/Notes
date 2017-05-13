@@ -20,6 +20,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.fly.notes.MainActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,11 +49,12 @@
         <activity
             android:name="com.fly.notes.LoginActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name="com.fly.notes.RegistrationActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
         <provider
             android:name="com.fly.notes.db.NotesContentProvider"
             android:authorities="com.fly.notes" />

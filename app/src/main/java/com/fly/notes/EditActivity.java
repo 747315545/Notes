@@ -3,7 +3,6 @@ package com.fly.notes;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -15,7 +14,6 @@ import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -30,8 +28,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.fly.notes.db.NoteInfoColumns;
 import com.fly.notes.model.MyList;
 import com.fly.notes.model.NoteInfo;
 import com.fly.notes.util.ImageUtils;
@@ -45,6 +41,9 @@ import com.fly.notes.widget.StrokeImageView;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 
 /**
@@ -203,7 +202,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
 
     private void fillNote() {
         note = new NoteInfo();
-        note._id = System.currentTimeMillis();
+        note.id = System.currentTimeMillis();
         note.modifiedTime = System.currentTimeMillis();
     }
 
@@ -234,7 +233,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.edit_activity_iv_share:
                 Intent intent = new Intent(EditActivity.this, PhotoShareActivity.class);
                 intent.putExtra("data", viewList.toString());
-                intent.putExtra("id", note._id);
+                intent.putExtra("id", note.id);
                 EditActivity.this.startActivity(intent);
                 EditActivity.this.overridePendingTransition(R.anim.activity_push_in, R.anim.fake_anim);
                 break;
@@ -271,8 +270,8 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.tv_pop_delete:
                 deletePopupWindow.dismiss();
                 deletePopupWindow = null;
-                getContentResolver().delete(Uri.parse("content://com.fly.notes/notes"), "_id=?", new String[]{note._id + ""});
-                ImageUtils.deleteImagePath(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + note._id);
+                getContentResolver().delete(Uri.parse("content://com.fly.notes/notes"), "id=?", new String[]{note.id + ""});
+                ImageUtils.deleteImagePath(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + note.id);
                 isDeleted = true;
                 finish();
         }
@@ -315,12 +314,12 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
                     note.firstPicPath = "";
                 insertOrUpdate(note);
             } else {
-                ImageUtils.deleteImagePath(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + note._id);
+                ImageUtils.deleteImagePath(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + note.id);
             }
         } else {
             if (viewList.toString().equals("000")) {
-                getContentResolver().delete(Uri.parse("content://com.fly.notes/notes"), "_id=?", new String[]{note._id + ""});
-                ImageUtils.deleteImagePath(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + note._id);
+                getContentResolver().delete(Uri.parse("content://com.fly.notes/notes"), "id=?", new String[]{note.id + ""});
+                ImageUtils.deleteImagePath(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + File.separator + note.id);
             } else if (!note.body.equals(viewList.toString())) {
                 note.body = viewList.toString();
                 if (((MyList) viewList).getList().get(0).length() == 3)
@@ -342,17 +341,11 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void insertOrUpdate(NoteInfo note) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(NoteInfoColumns._ID, note._id);
-        contentValues.put(NoteInfoColumns.MODIFIED_TIME, note.modifiedTime);
-        contentValues.put(NoteInfoColumns.BODY, note.body);
-        contentValues.put(NoteInfoColumns.TITLE, note.title);
-        contentValues.put(NoteInfoColumns.SUMMARY, note.summary);
-        contentValues.put(NoteInfoColumns.FIRST_PIC_PATH, note.firstPicPath);
+        ContentValues contentValues = note.getContentValues();
         if (mode == NEW_MODE) {
             getContentResolver().insert(Uri.parse("content://com.fly.notes/notes"), contentValues);
         } else {
-            getContentResolver().update(Uri.parse("content://com.fly.notes/notes"), contentValues, "_id=?", new String[]{note._id + ""});
+            getContentResolver().update(Uri.parse("content://com.fly.notes/notes"), contentValues, "id=?", new String[]{note.id + ""});
         }
     }
 
@@ -366,9 +359,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-        Log.d("huangfei","onLayoutChange");
         if (oldBottom != 0 && bottom != 0 && (oldBottom - bottom > keyHeight)) {
-            Log.d("huangfei","onLayoutChange1");
             isKeyboardShowed = true;
             if (llActivityBottom.getVisibility() != View.VISIBLE)
                 llActivityBottom.setVisibility(View.VISIBLE);
@@ -387,7 +378,6 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
                 tvTitleFinish.setClickable(true);
             }
         } else if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > keyHeight)) {
-            Log.d("huangfei","onLayoutChange2");
             isKeyboardShowed = false;
         }
     }
@@ -486,7 +476,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
             return getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                     .toString()
                     + File.separator
-                    + note._id
+                    + note.id
                     + File.separator
                     + System.currentTimeMillis()
                     + ".jpg";

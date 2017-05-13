@@ -6,6 +6,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 
 /**
  * Created by huangfei on 2016/11/11.
@@ -15,7 +16,8 @@ public class NotesContentProvider extends ContentProvider {
     private final static UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     private final static int CRUD = 1;
     private final static int DELETEITEM = 2;
-    private final static String TABLENAME = "notes";
+    private final static String NOTESTABLENAME = "notes";
+    private final static String NOTESCHANGETABLENAME = "notesChange";
     SQLiteDatabase db;
 
     static {
@@ -35,7 +37,7 @@ public class NotesContentProvider extends ContentProvider {
 
         switch (uriMatcher.match(uri)) {
             case CRUD:
-                Cursor cursor = db.query(TABLENAME, projection, selection, selectionArgs, null, null, sortOrder);
+                Cursor cursor = db.query(NOTESTABLENAME, projection, selection, selectionArgs, null, null, sortOrder);
                 return cursor;
         }
         return null;
@@ -50,7 +52,9 @@ public class NotesContentProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         switch (uriMatcher.match(uri)) {
             case CRUD:
-                long result = db.insert(TABLENAME, null, values);
+                long result = db.insert(NOTESTABLENAME, null, values);
+                long id = values.getAsLong(NoteInfoColumns._ID);
+                insertToChange(id,NoteChangeType.ADD);
                 if (result != -1) {
                     this.getContext().getContentResolver().notifyChange(uri, null);
                 }
@@ -67,7 +71,8 @@ public class NotesContentProvider extends ContentProvider {
                 db.beginTransaction();
                 try {
                     for (String a : selectionArgs) {
-                        db.delete(TABLENAME, selection, new String[]{a});
+                        db.delete(NOTESTABLENAME, selection, new String[]{a});
+                        insertToChange(Long.parseLong(a),NoteChangeType.DELETE);
                     }
                     db.setTransactionSuccessful();
                     bool = true;
@@ -81,7 +86,8 @@ public class NotesContentProvider extends ContentProvider {
                 }
                 break;
             case DELETEITEM:
-                long result = db.delete(TABLENAME,selection,selectionArgs);
+                long result = db.delete(NOTESTABLENAME,selection,selectionArgs);
+                insertToChange(Long.parseLong(selectionArgs[0]),NoteChangeType.DELETE);
                 if(result==-1){
                     this.getContext().getContentResolver().notifyChange(Uri.parse("content://com.fly.notes/notes"),null);
                 }
@@ -93,7 +99,9 @@ public class NotesContentProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         switch (uriMatcher.match(uri)) {
             case CRUD:
-                long result = db.update(TABLENAME, values, selection, selectionArgs);
+                long result = db.update(NOTESTABLENAME, values, selection, selectionArgs);
+                long id = Long.parseLong(selectionArgs[0]);
+                insertToChange(id,NoteChangeType.UPDATE);
                 if (result != -1) {
                     this.getContext().getContentResolver().notifyChange(uri, null);
                     return 1;
@@ -101,5 +109,17 @@ public class NotesContentProvider extends ContentProvider {
                 break;
         }
         return 0;
+    }
+
+    public void insertToChange(long id,int type){
+        Log.d("huangfei insertToChang:","type:"+type);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(NoteInfoColumns._ID,id);
+        contentValues.put(NoteInfoColumns.CHANGETYPE,type);
+        long result =db.insert(NOTESCHANGETABLENAME,null,contentValues);
+        if(result==-1){
+            result = db.update(NOTESCHANGETABLENAME,contentValues,"id=?", new String[]{id + ""});
+        }
+        Log.d("huangfei insertToChang:","type:"+type+"  result: "+result);
     }
 }

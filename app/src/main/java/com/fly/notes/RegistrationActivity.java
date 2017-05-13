@@ -115,7 +115,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
                             ToastUtil.INSTANCE.makeToast(RegistrationActivity.this, getResources().getText(R.string.error203));
                             break;
                         default:
-                            ToastUtil.INSTANCE.makeToast(RegistrationActivity.this, getResources().getText(R.string.error));
+                            ToastUtil.INSTANCE.makeToast(RegistrationActivity.this, getResources().getText(R.string.registerror));
                     }
                 }
             }

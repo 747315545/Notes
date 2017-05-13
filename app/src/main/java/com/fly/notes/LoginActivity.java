@@ -2,6 +2,7 @@ package com.fly.notes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +18,11 @@ import com.fly.notes.util.ImageUtils;
 import com.fly.notes.util.ToastUtil;
 import com.fly.notes.widget.CircleImageView;
 
+import java.io.File;
+
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.LogInListener;
 
 /**
@@ -31,6 +36,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private EditText passWord;
     private Button login;
     private Button regist;
+    public static final String PHOTO_IMAGE_FILE_NAME = "fileImg.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +92,24 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void done(NotesUser notesUser, BmobException e) {
                 if (e == null) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    //intent.putExtra("user", notesUser);
-                    startActivity(intent);
+                    BmobFile file = notesUser.getAvatar();
+                    if (file != null) {
+                        file.download(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + PHOTO_IMAGE_FILE_NAME), new DownloadFileListener() {
+                            @Override
+                            public void done(String s, BmobException e) {
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onProgress(Integer integer, long l) {
+
+                            }
+                        });
+                    }else {
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
                 } else {
                     int errorcode = e.getErrorCode();
                     switch (errorcode) {
@@ -99,7 +120,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             ToastUtil.INSTANCE.makeToast(LoginActivity.this, getResources().getText(R.string.error9016));
                             break;
                         default:
-                            ToastUtil.INSTANCE.makeToast(LoginActivity.this, getResources().getText(R.string.error));
+                            ToastUtil.INSTANCE.makeToast(LoginActivity.this, getResources().getText(R.string.loginerror));
                     }
                 }
             }

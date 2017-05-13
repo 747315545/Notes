@@ -12,7 +12,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "notes.db";
     private static final int DATABASE_VERSION = 1;
-    private String CREATE_NOTE_TABLE = "CREATE TABLE notes (_id LONG NOT NULL UNIQUE,title TEXT,summary TEXT,body TEXT,modifiedTime LONG,firstPicPath TEXT);";
+    private String CREATE_NOTE_TABLE = "CREATE TABLE notes (id LONG NOT NULL UNIQUE,title TEXT,summary TEXT,body TEXT,modifiedTime LONG,firstPicPath TEXT);";
+    private String CREATE_NOTE_CHANGE_TABLE = "CREATE TABLE notesChange (id LONG NOT NULL UNIQUE,changeType INT);";
     public DataBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -33,6 +34,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         switch (version){
             case 1:
                 db.execSQL(CREATE_NOTE_TABLE);
+                db.execSQL(CREATE_NOTE_CHANGE_TABLE);
                 break;
             default:
                 throw new IllegalStateException("Don't know how to upgrade to " + version);

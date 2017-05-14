@@ -26,6 +26,9 @@ public class PhotoViewActivity extends BaseActivity {
         setContentView(R.layout.activity_photeview);
         path = getIntent().getStringExtra("pic_path");
         Bitmap bitmap = BitmapFactory.decodeFile(path);
+        if(bitmap==null){
+            bitmap=BitmapFactory.decodeResource(getResources(),R.drawable.nopic);
+        }
         imageView = (ZoomImageView) findViewById(R.id.iv_activity_photoview);
         imageView.setImageBitmap(bitmap);
     }

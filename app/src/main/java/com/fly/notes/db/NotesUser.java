@@ -17,5 +17,4 @@ public class NotesUser extends BmobUser {
     public void setAvatar(BmobFile avatar) {
         this.avatar = avatar;
     }
-
 }

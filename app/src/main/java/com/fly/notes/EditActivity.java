@@ -423,6 +423,9 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
 
     private void addPicLayout(String path) {
         Bitmap paramBitmap = BitmapFactory.decodeFile(path);
+        if(paramBitmap==null){
+            paramBitmap=BitmapFactory.decodeResource(getResources(),R.drawable.nopic);
+        }
         final ImageLayout relativeLayout = new ImageLayout(this);
         int n = getResources().getDimensionPixelSize(R.dimen.ev_edit_activity_padding);
         int m = getResources().getDimensionPixelSize(R.dimen.ev_edit_activity_padding_bottom);

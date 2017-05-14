@@ -94,13 +94,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             return;
         }
         rlLoading.setVisibility(View.VISIBLE);
-        final Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                rlLoading.setVisibility(View.GONE);
-                super.handleMessage(msg);
-            }
-        };
         NotesUser.loginByAccount(useremail, password, new LogInListener<NotesUser>() {
             @Override
             public void done(NotesUser notesUser, BmobException e) {
@@ -110,7 +103,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         file.download(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + PHOTO_IMAGE_FILE_NAME), new DownloadFileListener() {
                             @Override
                             public void done(String s, BmobException e) {
-                                handler.sendEmptyMessage(0);
+                                rlLoading.setVisibility(View.GONE);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }
@@ -121,12 +114,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             }
                         });
                     } else {
-                        handler.sendEmptyMessage(0);
+                        rlLoading.setVisibility(View.GONE);
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                     }
                 } else {
-                    handler.sendEmptyMessage(0);
+                    rlLoading.setVisibility(View.GONE);
                     int errorcode = e.getErrorCode();
                     switch (errorcode) {
                         case ErrorCode.LOGIN_INCORRECT:

@@ -87,19 +87,15 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         if (TextUtils.isEmpty(password1)) {
             ToastUtil.INSTANCE.makeToast(RegistrationActivity.this, getResources().getText(R.string.toastpassword1));
             return;
+        }if (TextUtils.isEmpty(password2)) {
+            ToastUtil.INSTANCE.makeToast(RegistrationActivity.this, getResources().getText(R.string.toastpassword1));
+            return;
         }
         if (!password1.equals(password2)) {
             ToastUtil.INSTANCE.makeToast(RegistrationActivity.this, getResources().getText(R.string.toastpassword2));
             return;
         }
         rlLoading.setVisibility(View.VISIBLE);
-        final Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                rlLoading.setVisibility(View.GONE);
-                super.handleMessage(msg);
-            }
-        };
         NotesUser user = new NotesUser();
         user.setUsername(username);
         user.setEmail(email);
@@ -108,7 +104,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
 
             @Override
             public void done(NotesUser notesUser, BmobException e) {
-                handler.sendEmptyMessage(0);
+                rlLoading.setVisibility(View.GONE);
                 if (e == null) {
                     Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
                     startActivity(intent);

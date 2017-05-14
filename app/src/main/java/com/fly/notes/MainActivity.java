@@ -91,6 +91,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private RelativeLayout rlBottomDelete;
     private ImageView ivBottomDelete;
     private RelativeLayout rlNoData;
+    private LinearLayout llUserinfo;
     private LinearLayout llLock;
     private LinearLayout llLogin;
     private LinearLayout llupload;
@@ -111,13 +112,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public static final int REQUEST_EXTERNAL_STORAGE_CODE = 1;
     private static final int REQUEST_CODE_LOCK = 2;
     private NotesApplication myApp;
-    private AlertDialog photoDialog;
     public static final String PHOTO_IMAGE_FILE_NAME = "fileImg.jpg";
-    public static final int CAMERA_REQUEST_CODE = 100;
-    public static final int IMAGE_REQUEST_CODE = 101;
-    public static final int RESULT_REQUEST_CODE = 102;
-    private static final int REQUEST_BLUETOOTH_PERMISSION = 10;
-    private File tempFile = null;
     List<BmobObject> noteInfos;
     private UploadUtil uploadUtil;
     private DownloadUtil downloadUtil;
@@ -218,6 +213,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         customDrawerLayout = (CustomDrawerLayout) findViewById(R.id.drawerlayout);
         notesList = (RecyclerView) findViewById(R.id.notes_list);
         userIcon = (CircleImageView) findViewById(R.id.user_ico);
+        llUserinfo = (LinearLayout) findViewById(R.id.ll_userinfo);
         llLock = (LinearLayout) findViewById(R.id.ll_lock);
         textLock = (TextView) findViewById(R.id.tv_lock);
         imageLock = (ImageView) findViewById(R.id.ima_lock);
@@ -244,7 +240,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         llupload.setOnClickListener(this);
         lldownload.setOnClickListener(this);
         llabout.setOnClickListener(this);
-        userIcon.setOnClickListener(this);
+        llUserinfo.setOnClickListener(this);
         actionView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -334,9 +330,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 deletePopupWindow = null;
                 notesAdapter.deleteSelected();
                 break;
-            case R.id.user_ico:
+            case R.id.ll_userinfo:
                 if (NotesUser.getCurrentUser(NotesUser.class) != null) {
-                    showDialog();
+                    Intent intent = new Intent(MainActivity.this,ChangeUserInfoActivity.class);
+                    startActivity(intent);
                 } else {
                     ToastUtil.INSTANCE.makeToast(MainActivity.this, getResources().getText(R.string.usericotext));
                 }
@@ -374,82 +371,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
 
     }
-
-    private void showDialog() {
-        photoDialog = new AlertDialog.Builder(MainActivity.this).create();
-        photoDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        photoDialog.show();
-        Window window = photoDialog.getWindow();
-        window.setContentView(R.layout.dialog_photo);
-        window.setGravity(Gravity.BOTTOM);
-        window.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparent)));
-        window.setWindowAnimations(R.style.popupWindowAnim);
-        WindowManager.LayoutParams lp = photoDialog.getWindow().getAttributes();
-        DisplayMetrics dm = new DisplayMetrics();
-        window.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        lp.width = dm.widthPixels;
-        photoDialog.getWindow().setAttributes(lp);
-
-        photoDialog.findViewById(R.id.btn_camera).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toCamera();
-            }
-        });
-        photoDialog.findViewById(R.id.btn_picture).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toPicture();
-            }
-        });
-        photoDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                photoDialog.dismiss();
-            }
-        });
-    }
-
-    public void toCamera() {
-        requestWESPermission();
-        photoDialog.dismiss();
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), PHOTO_IMAGE_FILE_NAME)));
-        startActivityForResult(intent, CAMERA_REQUEST_CODE);
-    }
-
-    /**
-     * 跳转相册
-     */
-    private void toPicture() {
-        photoDialog.dismiss();
-        Intent intent = new Intent(Intent.ACTION_PICK, null);
-        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        startActivityForResult(intent, IMAGE_REQUEST_CODE);
-    }
-
-    /**
-     * 裁剪
-     *
-     * @param uri
-     */
-    private void startPhotoZoom(Uri uri) {
-        if (uri == null) {
-            Log.e("", "裁剪uri == null");
-            return;
-        }
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 320);
-        intent.putExtra("outputY", 320);
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, RESULT_REQUEST_CODE);
-    }
-
 
     private void toSetLock() {
         Intent intent;
@@ -570,20 +491,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return super.onKeyDown(keyCode, event);
     }
 
-    private void requestWESPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            int checkCallPhonePermission = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
-                    Toast.makeText(MainActivity.this, "Need write external storage permission.", Toast.LENGTH_SHORT).show();
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_BLUETOOTH_PERMISSION);
-                return;
-            } else {
-            }
-        } else {
-        }
-    }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -610,62 +517,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     savePattern();
                 }
                 break;
-            case IMAGE_REQUEST_CODE:
-                if (data != null) {
-                    startPhotoZoom(data.getData());
-                }
-                break;
-            case CAMERA_REQUEST_CODE:
-                tempFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), PHOTO_IMAGE_FILE_NAME);
-                startPhotoZoom(Uri.fromFile(tempFile));
-                break;
-            case RESULT_REQUEST_CODE:
-                if (data != null) {
-                    setImageToView(data);
-                }
-                break;
             default:
                 break;
         }
     }
 
-
-    private void setImageToView(Intent data) {
-        Bundle bundle = data.getExtras();
-        if (bundle != null) {
-            final Bitmap bitmap = bundle.getParcelable("data");
-            tempFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), PHOTO_IMAGE_FILE_NAME);
-            ImageUtils.compressImage(bitmap, tempFile);
-            final BmobFile bmobFile = new BmobFile(tempFile);
-            bmobFile.uploadblock(new UploadFileListener() {
-                @Override
-                public void done(BmobException e) {
-                    if (e == null) {
-                        NotesUser user = BmobUser.getCurrentUser(NotesUser.class);
-                        user.setAvatar(bmobFile);
-                        user.update(new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null) {
-                                    userIcon.setImageBitmap(bitmap);
-                                    ToastUtil.INSTANCE.makeToast(MainActivity.this, getResources().getText(R.string.avatar_editor_success));
-                                } else {
-                                    ToastUtil.INSTANCE.makeToast(MainActivity.this, getResources().getText(R.string.avatar_editor_failure));
-                                }
-                            }
-                        });
-                    } else {
-                        ToastUtil.INSTANCE.makeToast(MainActivity.this, getResources().getText(R.string.avatar_editor_failure));
-                    }
-                }
-
-                @Override
-                public void onProgress(Integer value) {
-                    super.onProgress(value);
-                }
-            });
-        }
-    }
 
     private void checkLogin() {
         NotesUser notesUser = NotesUser.getCurrentUser(NotesUser.class);

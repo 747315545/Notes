@@ -149,6 +149,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         }
         checkLogin();
+        changeStatus();
         super.onResume();
     }
 
@@ -365,6 +366,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.ll_about:
+                Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -684,6 +687,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+
     private void toUpload() {
         progressUpload.setVisibility(View.VISIBLE);
         lldownload.setClickable(false);
@@ -724,7 +728,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             super.onBackPressed();
             return;
         } else {
-            ToastUtil.INSTANCE.makeToast(MainActivity.this,getResources().getText(R.string.toastback));
+            ToastUtil.INSTANCE.makeToast(MainActivity.this, getResources().getText(R.string.toastback));
         }
         mBackPressed = System.currentTimeMillis();
     }

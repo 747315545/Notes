@@ -1,99 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/item_bg"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/rl_title_height"
-        android:background="@color/title_bg">
-
-        <ImageView
-            android:id="@+id/ima_regist_back"
-            android:layout_width="50dp"
-            android:layout_height="fill_parent"
-            android:layout_centerVertical="true"
-            android:layout_gravity="start"
-            android:layout_marginStart="@dimen/iv_edit_activity_title_back_arrow_margin_start"
-            android:clickable="true"
-            android:gravity="start|center"
-            android:paddingRight="@dimen/title_tv_cancel_margin_left"
-            android:src="@drawable/title_icon_back" />
-
-        <TextView
-            android:id="@+id/tv_title_edit"
-            android:layout_width="@dimen/tv_title_width"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginEnd="@dimen/tv_title_margin_end"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/registtext"
-            android:textColor="@color/title_text_black_color"
-            android:textSize="@dimen/tv_title_text_size" />
-    </RelativeLayout>
-
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingStart="8.0dp"
-        android:paddingEnd="8.0dp">
+        android:background="@color/item_bg"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/ed_registusername"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="40.0dp"
-            android:layout_marginTop="10.0dp"
-            android:background="@drawable/bg_edittext"
+            android:layout_height="@dimen/rl_title_height"
+            android:background="@color/title_bg">
+
+            <ImageView
+                android:id="@+id/ima_regist_back"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_centerVertical="true"
+                android:layout_gravity="start"
+                android:layout_marginStart="@dimen/iv_edit_activity_title_back_arrow_margin_start"
+                android:clickable="true"
+                android:gravity="start|center"
+                android:paddingRight="@dimen/title_tv_cancel_margin_left"
+                android:src="@drawable/title_icon_back" />
+
+            <TextView
+                android:id="@+id/tv_title_edit"
+                android:layout_width="@dimen/tv_title_width"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="@dimen/tv_title_margin_end"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/registtext"
+                android:textColor="@color/title_text_black_color"
+                android:textSize="@dimen/tv_title_text_size" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             android:paddingEnd="8.0dp"
-            android:paddingStart="8.0dp"
-            android:hint="@string/registusername"/>
+            android:paddingStart="8.0dp">
 
-        <EditText
-            android:id="@+id/ed_registemail"
-            android:layout_width="match_parent"
-            android:layout_height="40.0dp"
-            android:layout_marginTop="10.0dp"
-            android:background="@drawable/bg_edittext"
-            android:paddingEnd="8.0dp"
-            android:paddingStart="8.0dp"
-            android:hint="@string/registemail"/>
+            <EditText
+                android:id="@+id/ed_registusername"
+                android:layout_width="match_parent"
+                android:layout_height="40.0dp"
+                android:layout_marginTop="10.0dp"
+                android:background="@drawable/bg_edittext"
+                android:hint="@string/registusername"
+                android:paddingEnd="8.0dp"
+                android:paddingStart="8.0dp" />
 
-        <EditText
-            android:id="@+id/ed_registpassword1"
-            android:layout_width="match_parent"
-            android:inputType="textPassword"
-            android:layout_height="40.0dp"
-            android:layout_marginTop="10.0dp"
-            android:background="@drawable/bg_edittext"
-            android:paddingEnd="8.0dp"
-            android:paddingStart="8.0dp"
-            android:hint="@string/registpassword1"/>
+            <EditText
+                android:id="@+id/ed_registemail"
+                android:layout_width="match_parent"
+                android:layout_height="40.0dp"
+                android:layout_marginTop="10.0dp"
+                android:background="@drawable/bg_edittext"
+                android:hint="@string/registemail"
+                android:paddingEnd="8.0dp"
+                android:paddingStart="8.0dp" />
 
-        <EditText
-            android:id="@+id/ed_registpassword2"
-            android:layout_width="match_parent"
-            android:inputType="textPassword"
-            android:layout_height="40.0dp"
-            android:layout_marginTop="10.0dp"
-            android:paddingEnd="8.0dp"
-            android:paddingStart="8.0dp"
-            android:background="@drawable/bg_edittext"
-            android:hint="@string/registpassword2"/>
+            <EditText
+                android:id="@+id/ed_registpassword1"
+                android:layout_width="match_parent"
+                android:layout_height="40.0dp"
+                android:layout_marginTop="10.0dp"
+                android:background="@drawable/bg_edittext"
+                android:hint="@string/registpassword1"
+                android:inputType="textPassword"
+                android:paddingEnd="8.0dp"
+                android:paddingStart="8.0dp" />
 
-        <Button
-            android:id="@+id/btn_regist"
-            android:layout_width="match_parent"
-            android:layout_height="50.0dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="10.0dp"
-            android:background="@drawable/btn_login"
-            android:text="@string/registtext"
-            android:textColor="@color/item_tv_delete_text_color"
-            android:textSize="20.0sp" />
+            <EditText
+                android:id="@+id/ed_registpassword2"
+                android:layout_width="match_parent"
+                android:layout_height="40.0dp"
+                android:layout_marginTop="10.0dp"
+                android:background="@drawable/bg_edittext"
+                android:hint="@string/registpassword2"
+                android:inputType="textPassword"
+                android:paddingEnd="8.0dp"
+                android:paddingStart="8.0dp" />
+
+            <Button
+                android:id="@+id/btn_regist"
+                android:layout_width="match_parent"
+                android:layout_height="50.0dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10.0dp"
+                android:background="@drawable/btn_login"
+                android:text="@string/registtext"
+                android:textColor="@color/item_tv_delete_text_color"
+                android:textSize="20.0sp" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rl_regist_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/translucent_bg"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="100.0dp"
+            android:layout_height="100.0dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:indeterminateBehavior="repeat"
+            android:indeterminateDrawable="@drawable/loadingani" />
+    </RelativeLayout>
+</RelativeLayout>

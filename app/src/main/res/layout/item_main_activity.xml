@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="horizontal"
-    android:paddingRight="-62.0dip"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="@dimen/item_height"
-    android:weightSum="1.0"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="horizontal"
+    android:paddingRight="-62.0dip"
+    android:weightSum="1.0">
+
     <LinearLayout
         android:layout_width="0.0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1.0">
+
         <include
             android:id="@+id/item_content"
             layout="@layout/item_activity_main_content" />
     </LinearLayout>
+
     <TextView
-        android:textSize="@dimen/item_tv_delete_text_size"
-        android:textColor="@color/item_tv_delete_text_color"
-        android:gravity="center" 
         android:id="@+id/tv_delete"
-        android:background="@color/item_tv_delete_bg"
-        android:clickable="true"
         android:layout_width="@dimen/item_tv_delete_width"
         android:layout_height="@dimen/item_height"
+        android:layout_centerInParent="true"
         android:layout_marginRight="-5.0dip"
+        android:background="@color/item_tv_delete_bg"
+        android:clickable="true"
+        android:gravity="center"
         android:text="@string/delete"
-        android:layout_centerInParent="true" />
+        android:textColor="@color/item_tv_delete_text_color"
+        android:textSize="@dimen/item_tv_delete_text_size" />
 </LinearLayout>

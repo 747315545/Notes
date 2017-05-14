@@ -22,7 +22,7 @@ public class NotesContentProvider extends ContentProvider {
 
     static {
         uriMatcher.addURI("com.fly.notes", "notes", CRUD);
-        uriMatcher.addURI("com.fly.notes","notes_id",DELETEITEM);
+        uriMatcher.addURI("com.fly.notes", "notes_id", DELETEITEM);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class NotesContentProvider extends ContentProvider {
         }
         return null;
     }
-    
+
     @Override
     public String getType(Uri uri) {
         return null;
@@ -54,7 +54,7 @@ public class NotesContentProvider extends ContentProvider {
             case CRUD:
                 long result = db.insert(NOTESTABLENAME, null, values);
                 long id = values.getAsLong(NoteInfoColumns._ID);
-                insertToChange(id,NoteChangeType.ADD);
+                insertToChange(id, NoteChangeType.ADD);
                 if (result != -1) {
                     this.getContext().getContentResolver().notifyChange(uri, null);
                 }
@@ -72,7 +72,7 @@ public class NotesContentProvider extends ContentProvider {
                 try {
                     for (String a : selectionArgs) {
                         db.delete(NOTESTABLENAME, selection, new String[]{a});
-                        insertToChange(Long.parseLong(a),NoteChangeType.DELETE);
+                        insertToChange(Long.parseLong(a), NoteChangeType.DELETE);
                     }
                     db.setTransactionSuccessful();
                     bool = true;
@@ -86,10 +86,10 @@ public class NotesContentProvider extends ContentProvider {
                 }
                 break;
             case DELETEITEM:
-                long result = db.delete(NOTESTABLENAME,selection,selectionArgs);
-                insertToChange(Long.parseLong(selectionArgs[0]),NoteChangeType.DELETE);
-                if(result==-1){
-                    this.getContext().getContentResolver().notifyChange(Uri.parse("content://com.fly.notes/notes"),null);
+                long result = db.delete(NOTESTABLENAME, selection, selectionArgs);
+                insertToChange(Long.parseLong(selectionArgs[0]), NoteChangeType.DELETE);
+                if (result == -1) {
+                    this.getContext().getContentResolver().notifyChange(Uri.parse("content://com.fly.notes/notes"), null);
                 }
         }
         return 0;
@@ -101,7 +101,7 @@ public class NotesContentProvider extends ContentProvider {
             case CRUD:
                 long result = db.update(NOTESTABLENAME, values, selection, selectionArgs);
                 long id = Long.parseLong(selectionArgs[0]);
-                insertToChange(id,NoteChangeType.UPDATE);
+                insertToChange(id, NoteChangeType.UPDATE);
                 if (result != -1) {
                     this.getContext().getContentResolver().notifyChange(uri, null);
                     return 1;
@@ -111,15 +111,15 @@ public class NotesContentProvider extends ContentProvider {
         return 0;
     }
 
-    public void insertToChange(long id,int type){
-        Log.d("huangfei insertToChang:","type:"+type);
+    public void insertToChange(long id, int type) {
+        Log.d("huangfei insertToChang:", "type:" + type);
         ContentValues contentValues = new ContentValues();
-        contentValues.put(NoteInfoColumns._ID,id);
-        contentValues.put(NoteInfoColumns.CHANGETYPE,type);
-        long result =db.insert(NOTESCHANGETABLENAME,null,contentValues);
-        if(result==-1){
-            result = db.update(NOTESCHANGETABLENAME,contentValues,"id=?", new String[]{id + ""});
+        contentValues.put(NoteInfoColumns._ID, id);
+        contentValues.put(NoteInfoColumns.CHANGETYPE, type);
+        long result = db.insert(NOTESCHANGETABLENAME, null, contentValues);
+        if (result == -1) {
+            result = db.update(NOTESCHANGETABLENAME, contentValues, "id=?", new String[]{id + ""});
         }
-        Log.d("huangfei insertToChang:","type:"+type+"  result: "+result);
+        Log.d("huangfei insertToChang:", "type:" + type + "  result: " + result);
     }
 }

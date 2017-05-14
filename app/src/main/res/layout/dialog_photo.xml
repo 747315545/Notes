@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:gravity="bottom"
-    android:orientation="vertical"
-    android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/transparent">
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:gravity="bottom"
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/btn_camera"
@@ -14,7 +13,7 @@
         android:background="@drawable/main_item_click"
         android:text="@string/camer"
         android:textColor="@color/tv_main_activity_edit_text_color"
-        android:textSize="@dimen/tv_title_text_size"/>
+        android:textSize="@dimen/tv_title_text_size" />
 
     <View
         android:layout_width="fill_parent"
@@ -28,7 +27,7 @@
         android:background="@drawable/main_item_click"
         android:text="@string/gallery"
         android:textColor="@color/tv_main_activity_edit_text_color"
-        android:textSize="@dimen/tv_title_text_size"/>
+        android:textSize="@dimen/tv_title_text_size" />
 
     <View
         android:layout_width="fill_parent"
@@ -42,6 +41,6 @@
         android:background="@drawable/main_item_click"
         android:text="@string/cancel"
         android:textColor="@color/tv_main_activity_edit_text_color"
-        android:textSize="@dimen/tv_title_text_size"/>
+        android:textSize="@dimen/tv_title_text_size" />
 
 </LinearLayout>

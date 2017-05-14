@@ -17,8 +17,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.fly.notes.util.Utils;
 import com.fly.notes.widget.LongPhotoView;
+
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -41,7 +43,8 @@ public class PhotoShareActivity extends BaseActivity implements View.OnClickList
     private LongPhotoView mLongPhotoView;
     private Toast toast;
     private Uri uri = null;
-    private static final String TAG = "PhotoShareActivity" ;
+    private static final String TAG = "PhotoShareActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +55,7 @@ public class PhotoShareActivity extends BaseActivity implements View.OnClickList
         initBottomBar();
     }
 
-    private void initView(){
+    private void initView() {
         tvShareCancel = (TextView) findViewById(R.id.exit_share_cancel);
         tvPhotoSave = (TextView) findViewById(R.id.share_photo_save);
         llPengYouQuan = (LinearLayout) findViewById(R.id.pengyouquan_layout);
@@ -64,15 +67,15 @@ public class PhotoShareActivity extends BaseActivity implements View.OnClickList
         ivWeiXin = (ImageView) findViewById(R.id.weixin);
         ivQQ = (ImageView) findViewById(R.id.qq);
         ivMore = (ImageView) findViewById(R.id.more);
-        LinearLayout localLinearLayout = (LinearLayout)findViewById(R.id.share_content_container);
+        LinearLayout localLinearLayout = (LinearLayout) findViewById(R.id.share_content_container);
         int i = localLinearLayout.getPaddingLeft();
         int j = localLinearLayout.getPaddingRight();
-        this.mLongPhotoView = new LongPhotoView(this, getIntent().getStringExtra("data"), ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getWidth() - i - j);
+        this.mLongPhotoView = new LongPhotoView(this, getIntent().getStringExtra("data"), ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getWidth() - i - j);
         localLinearLayout.addView(this.mLongPhotoView);
     }
 
 
-    private void initAction(){
+    private void initAction() {
         tvShareCancel.setOnClickListener(this);
         tvPhotoSave.setOnClickListener(this);
         ivPengYouQuan.setOnClickListener(this);
@@ -82,21 +85,21 @@ public class PhotoShareActivity extends BaseActivity implements View.OnClickList
         ivMore.setOnClickListener(this);
     }
 
-    private void initBottomBar(){
+    private void initBottomBar() {
         PackageInfo packageInfo;
-        packageInfo = Utils.getPackageInfo(PhotoShareActivity.this,"com.tencent.mm");
-        if(packageInfo!=null){
+        packageInfo = Utils.getPackageInfo(PhotoShareActivity.this, "com.tencent.mm");
+        if (packageInfo != null) {
             llPengYouQuan.setVisibility(View.VISIBLE);
             llWeiXin.setVisibility(View.VISIBLE);
             ivWeiXin.setImageDrawable(packageInfo.applicationInfo.loadIcon(getPackageManager()));
         }
-        packageInfo=Utils.getPackageInfo(PhotoShareActivity.this,"com.sina.weibo");
-        if(packageInfo!=null){
+        packageInfo = Utils.getPackageInfo(PhotoShareActivity.this, "com.sina.weibo");
+        if (packageInfo != null) {
             llWeiBo.setVisibility(View.VISIBLE);
             ivWeiBo.setImageDrawable(packageInfo.applicationInfo.loadIcon(getPackageManager()));
         }
-        packageInfo = Utils.getPackageInfo(PhotoShareActivity.this,"com.tencent.mobileqq");
-        if(packageInfo!=null){
+        packageInfo = Utils.getPackageInfo(PhotoShareActivity.this, "com.tencent.mobileqq");
+        if (packageInfo != null) {
             llQQ.setVisibility(View.VISIBLE);
             ivQQ.setImageDrawable(packageInfo.applicationInfo.loadIcon(getPackageManager()));
         }
@@ -109,10 +112,10 @@ public class PhotoShareActivity extends BaseActivity implements View.OnClickList
         Intent shareIntent;
         boolean needShare = true;
         ComponentName componentName = null;
-        if(viewId != R.id.exit_share_cancel && viewId != R.id.share_photo_save){
+        if (viewId != R.id.exit_share_cancel && viewId != R.id.share_photo_save) {
             uri = Uri.parse(MediaStore.Images.Media.insertImage(PhotoShareActivity.this.getContentResolver(), image, null, null));
         }
-        switch (viewId){
+        switch (viewId) {
             case R.id.exit_share_cancel:
                 needShare = false;
                 Intent intent = new Intent(PhotoShareActivity.this, EditActivity.class);
@@ -125,9 +128,9 @@ public class PhotoShareActivity extends BaseActivity implements View.OnClickList
                     File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                             .toString()
                             + File.separator
-                            +"cache"
+                            + "cache"
                             + File.separator
-                            +getIntent().getLongExtra("id",0)
+                            + getIntent().getLongExtra("id", 0)
                             + ".jpg");
                     if (!file.getParentFile().exists()) {
                         file.getParentFile().mkdirs();
@@ -136,17 +139,17 @@ public class PhotoShareActivity extends BaseActivity implements View.OnClickList
                     image.compress(Bitmap.CompressFormat.JPEG, 100, out);
                     out.flush();
                     out.close();
-                    if(toast == null){
-                        toast = Toast.makeText(PhotoShareActivity.this,PhotoShareActivity.this.getResources().getText(R.string.save_success)+file.getAbsolutePath(),Toast.LENGTH_LONG);
-                    }else {
-                        toast.setText(PhotoShareActivity.this.getResources().getText(R.string.save_success)+file.getAbsolutePath());
+                    if (toast == null) {
+                        toast = Toast.makeText(PhotoShareActivity.this, PhotoShareActivity.this.getResources().getText(R.string.save_success) + file.getAbsolutePath(), Toast.LENGTH_LONG);
+                    } else {
+                        toast.setText(PhotoShareActivity.this.getResources().getText(R.string.save_success) + file.getAbsolutePath());
                     }
                     toast.show();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    if(toast == null){
-                        toast = Toast.makeText(PhotoShareActivity.this,PhotoShareActivity.this.getResources().getText(R.string.save_failed),Toast.LENGTH_LONG);
-                    }else {
+                    if (toast == null) {
+                        toast = Toast.makeText(PhotoShareActivity.this, PhotoShareActivity.this.getResources().getText(R.string.save_failed), Toast.LENGTH_LONG);
+                    } else {
                         toast.setText(PhotoShareActivity.this.getResources().getText(R.string.save_failed));
                     }
                     toast.show();
@@ -171,12 +174,12 @@ public class PhotoShareActivity extends BaseActivity implements View.OnClickList
                 componentName = new ComponentName(
                         "com.tencent.mobileqq",
                         "com.tencent.mobileqq.activity.JumpActivity");
-                Log.e(TAG,componentName+"");
+                Log.e(TAG, componentName + "");
                 break;
             case R.id.more:
                 break;
         }
-        if(needShare) {
+        if (needShare) {
             shareIntent = new Intent(Intent.ACTION_SEND);
             if (componentName != null) {
                 shareIntent.setComponent(componentName);
@@ -185,12 +188,12 @@ public class PhotoShareActivity extends BaseActivity implements View.OnClickList
             shareIntent.setType("image/*");
             startActivity(shareIntent);
         }
-        if(image !=null && !image.isRecycled()){
+        if (image != null && !image.isRecycled()) {
             image.recycle();
         }
     }
 
-    public  Bitmap loadBitmapFromView(View v) {
+    public Bitmap loadBitmapFromView(View v) {
         int i = v.getWidth();
         int j = v.getHeight();
         v.setDrawingCacheEnabled(true);
@@ -216,7 +219,7 @@ public class PhotoShareActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void onResume() {
-        if(uri != null) {
+        if (uri != null) {
             PhotoShareActivity.this.getContentResolver().delete(uri, null, null);
             uri = null;
         }

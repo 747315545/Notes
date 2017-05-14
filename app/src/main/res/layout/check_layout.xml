@@ -2,9 +2,9 @@
 <com.fly.notes.widget.CheckboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:background="@color/title_bg"
-    android:minHeight="25.0dip">
+    android:minHeight="25.0dip"
+    android:orientation="horizontal">
 
     <CheckBox
         android:id="@+id/cb_edit_activity"
@@ -17,8 +17,8 @@
         android:id="@+id/ev_check_edit_activity"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12.0dip"
         android:layout_gravity="center_vertical"
+        android:layout_marginLeft="12.0dip"
         android:autoLink="none"
         android:background="@color/title_bg"
         android:gravity="start|center|top"

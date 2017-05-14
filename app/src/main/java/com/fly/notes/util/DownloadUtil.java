@@ -34,21 +34,21 @@ public class DownloadUtil {
     private Handler mhandler;
     private final static Uri uri = Uri.parse("content://com.fly.notes/notes");
 
-    public DownloadUtil(Context context,Handler handler){
-        mcontext =context;
-        mhandler =handler;
+    public DownloadUtil(Context context, Handler handler) {
+        mcontext = context;
+        mhandler = handler;
     }
 
-    public void downloadBatch(){
+    public void downloadBatch() {
         BmobQuery bmobQuery = new BmobQuery();
         bmobQuery.addWhereEqualTo("author", NotesUser.getCurrentUser(NotesUser.class));
         bmobQuery.findObjects(new FindListener<NoteInfo>() {
             @Override
             public void done(List<NoteInfo> list, BmobException e) {
-                if(e==null){
+                if (e == null) {
                     swtichDownload(list);
-                }else{
-                    ToastUtil.INSTANCE.makeToast(mcontext,mcontext.getResources().getText(R.string.toastuploaderror));
+                } else {
+                    ToastUtil.INSTANCE.makeToast(mcontext, mcontext.getResources().getText(R.string.toastuploaderror));
                     mhandler.sendEmptyMessage(-1);
                 }
             }
@@ -56,81 +56,83 @@ public class DownloadUtil {
         });
     }
 
-    private void swtichDownload(List<NoteInfo> list){
+    private void swtichDownload(List<NoteInfo> list) {
         List idlist = getRawIdList();
         Message m = Message.obtain();
-        m.arg1=list.size();
-        m.what=-2;
+        m.arg1 = list.size();
+        m.what = -2;
         mhandler.sendMessage(m);
-        for(NoteInfo n :list){
-            if(idlist.contains(n.getId())){
-                download(n,true);
-            }else {
-                download(n,false);
+        for (NoteInfo n : list) {
+            if (idlist.contains(n.getId())) {
+                download(n, true);
+            } else {
+                download(n, false);
             }
         }
 
     }
-    public List getRawIdList(){
+
+    public List getRawIdList() {
         List idList = new ArrayList<>();
-        Cursor cursor =mcontext.getContentResolver().query(uri,new String[]{NoteInfoColumns._ID},null,null,null);
-        if(cursor!=null&&cursor.moveToFirst()){
-            do{
+        Cursor cursor = mcontext.getContentResolver().query(uri, new String[]{NoteInfoColumns._ID}, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
                 long id = cursor.getLong(cursor.getColumnIndex(NoteInfoColumns._ID));
                 idList.add(id);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         return idList;
     }
 
 
-    private void download(NoteInfo noteInfo, final boolean exists){
+    private void download(NoteInfo noteInfo, final boolean exists) {
 
-        final long id =noteInfo.getId();
+        final long id = noteInfo.getId();
         List<String> imageurls = noteInfo.getImageUrls();
-        List<String> imageList =noteInfo.getImageList();
+        List<String> imageList = noteInfo.getImageList();
         final int size = imageurls.size();
-        final ContentValues contentValues =noteInfo.getContentValues();
-        final Handler handler = new Handler(){
-            int i =0;
+        final ContentValues contentValues = noteInfo.getContentValues();
+        final Handler handler = new Handler() {
+            int i = 0;
             int max = size;
+
             @Override
             public void handleMessage(Message msg) {
                 i++;
-                if(i==max){
-                    if(exists) {
+                if (i == max) {
+                    if (exists) {
                         mcontext.getContentResolver().update(uri, contentValues, "id=?", new String[]{id + ""});
-                    }else {
-                        mcontext.getContentResolver().insert(uri,contentValues);
+                    } else {
+                        mcontext.getContentResolver().insert(uri, contentValues);
                     }
                     mhandler.sendEmptyMessage(NoteChangeType.ADD);
                 }
                 super.handleMessage(msg);
             }
         };
-       for (int i=0;i<imageList.size();i++){
-           String url = imageurls.get(i);
-           String path = imageList.get(i);
-           if(url!=null){
-               File file = new File(path);
-               if(!file.exists()) {
-                   BmobFile bmobFile = new BmobFile("huangfei.jpg",null,url);
-                   bmobFile.download(file, new DownloadFileListener() {
-                       @Override
-                       public void done(String s, BmobException e) {
-                           handler.sendEmptyMessage(0);
-                       }
+        for (int i = 0; i < imageList.size(); i++) {
+            String url = imageurls.get(i);
+            String path = imageList.get(i);
+            if (url != null) {
+                File file = new File(path);
+                if (!file.exists()) {
+                    BmobFile bmobFile = new BmobFile("huangfei.jpg", null, url);
+                    bmobFile.download(file, new DownloadFileListener() {
+                        @Override
+                        public void done(String s, BmobException e) {
+                            handler.sendEmptyMessage(0);
+                        }
 
-                       @Override
-                       public void onProgress(Integer integer, long l) {
+                        @Override
+                        public void onProgress(Integer integer, long l) {
 
-                       }
-                   });
-               }else {
-                   handler.sendEmptyMessage(0);
-               }
-           }
-       }
+                        }
+                    });
+                } else {
+                    handler.sendEmptyMessage(0);
+                }
+            }
+        }
 
     }
 }

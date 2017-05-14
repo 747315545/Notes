@@ -1,39 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:background="@color/title_bg"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="@dimen/rl_title_height"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@color/title_bg">
+
     <TextView
-        android:textSize="@dimen/tv_title_text_size"
-        android:textColor="@color/title_text_black_color"
-        android:ellipsize="end" android:gravity="center"
         android:id="@+id/tv_title_edit_or_new"
         android:layout_width="@dimen/tv_title_width"
         android:layout_height="wrap_content"
-        android:text="@string/new_note" android:singleLine="true"
         android:layout_centerInParent="true"
-        android:layout_marginEnd="@dimen/tv_title_margin_end" />
+        android:layout_marginEnd="@dimen/tv_title_margin_end"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="@string/new_note"
+        android:textColor="@color/title_text_black_color"
+        android:textSize="@dimen/tv_title_text_size" />
+
     <TextView
-        android:textSize="@dimen/tv_edit_text_size"
-        android:textColor="@color/tv_edit_activity_title_finish_text_color_enabled_false"
-        android:gravity="end|center" android:layout_gravity="end"
         android:id="@+id/tv_edit_activity_title_finish"
-        android:paddingLeft="@dimen/tv_edit_margin_end"
-        android:paddingRight="@dimen/tv_edit_margin_end"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:text="@string/finish"
+        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_gravity="end"
+        android:gravity="end|center"
+        android:paddingLeft="@dimen/tv_edit_margin_end"
+        android:paddingRight="@dimen/tv_edit_margin_end"
+        android:text="@string/finish"
+        android:textColor="@color/tv_edit_activity_title_finish_text_color_enabled_false"
+        android:textSize="@dimen/tv_edit_text_size" />
+
     <ImageView
-        android:gravity="start|center"
-        android:layout_gravity="start"
         android:id="@+id/edit_activity_iv_title_new_edit_back_arrow"
-        android:paddingRight="@dimen/title_tv_cancel_margin_left"
-        android:clickable="true"
         android:layout_width="50dp"
         android:layout_height="fill_parent"
-        android:src="@drawable/title_icon_back"
-        android:layout_marginStart="@dimen/iv_edit_activity_title_back_arrow_margin_start" />
+        android:layout_gravity="start"
+        android:layout_marginStart="@dimen/iv_edit_activity_title_back_arrow_margin_start"
+        android:clickable="true"
+        android:gravity="start|center"
+        android:paddingRight="@dimen/title_tv_cancel_margin_left"
+        android:src="@drawable/title_icon_back" />
 </RelativeLayout>

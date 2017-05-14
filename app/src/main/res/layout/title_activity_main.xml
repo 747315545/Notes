@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:background="@color/title_bg"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/rl_title_height"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/title_bg">
+
     <at.markushi.ui.ActionView
         android:id="@+id/action"
         android:layout_width="30.0dp"
-        android:layout_centerVertical="true"
         android:layout_height="30.0dp"
-        app:av_color="@android:color/black"
+        android:layout_centerVertical="true"
         app:av_action="drawer"
-        />
+        app:av_color="@android:color/black" />
+
     <TextView
-        android:textSize="@dimen/tv_title_text_size"
-        android:textColor="@color/title_text_black_color"
-        android:ellipsize="end"
-        android:gravity="center"
         android:id="@+id/tv_title_edit"
         android:layout_width="@dimen/tv_title_width"
         android:layout_height="wrap_content"
-        android:text="@string/notes"
-        android:singleLine="true"
         android:layout_centerInParent="true"
-        android:layout_marginEnd="@dimen/tv_title_margin_end" />
+        android:layout_marginEnd="@dimen/tv_title_margin_end"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="@string/notes"
+        android:textColor="@color/title_text_black_color"
+        android:textSize="@dimen/tv_title_text_size" />
+
     <TextView
-        android:textSize="@dimen/tv_edit_text_size"
-        android:gravity="end|center"
         android:id="@+id/tv_edit"
-        android:paddingLeft="@dimen/tv_edit_margin_end"
-        android:paddingRight="@dimen/tv_edit_margin_end"
-        android:focusable="true"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:text="@string/edit"
+        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true" />
+        android:focusable="true"
+        android:gravity="end|center"
+        android:paddingLeft="@dimen/tv_edit_margin_end"
+        android:paddingRight="@dimen/tv_edit_margin_end"
+        android:text="@string/edit"
+        android:textSize="@dimen/tv_edit_text_size" />
 </RelativeLayout>

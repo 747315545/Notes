@@ -14,6 +14,7 @@ import java.util.List;
 
 public class MyList extends ArrayList<View> {
     private List<String> list = new LinkedList<>();
+
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder();
@@ -21,9 +22,9 @@ public class MyList extends ArrayList<View> {
         list.clear();
         for (int i = 0; i < this.size(); i++) {
             str = this.get(i).toString();
-            if(i==0){
+            if (i == 0) {
                 list.add(str);
-            }else if(str.charAt(0)=='0'&&str.length()>3){
+            } else if (str.charAt(0) == '0' && str.length() > 3) {
                 list.add(str.substring(3));
             }
             string.append(str + ":");
@@ -32,7 +33,8 @@ public class MyList extends ArrayList<View> {
             string.deleteCharAt(string.length() - 1);
         return string.toString();
     }
-    public  List<String> getList() {
+
+    public List<String> getList() {
         return list;
     }
 }

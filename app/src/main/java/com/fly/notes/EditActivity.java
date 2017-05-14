@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.fly.notes.model.MyList;
 import com.fly.notes.model.NoteInfo;
 import com.fly.notes.util.ImageUtils;
@@ -261,7 +262,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
                 Uri uri;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     uri = FileProvider.getUriForFile(EditActivity.this, "com.fly.notes.fileProvider", file);
-                }else {
+                } else {
                     uri = Uri.fromFile(file);
                 }
                 intentForCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
@@ -394,7 +395,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener, 
                 if (!file.getParentFile().exists()) {
                     file.getParentFile().mkdirs();
                 }
-                if (ImageUtils.SmallBitmap(ImageUtils.getImageAbsolutePath(EditActivity.this,uri), k, file)) {
+                if (ImageUtils.SmallBitmap(ImageUtils.getImageAbsolutePath(EditActivity.this, uri), k, file)) {
                     addPicLayout(getSavePath());
                     addCheckBoxLayout(false, false, null);
                     if (mode == NEW_MODE) {

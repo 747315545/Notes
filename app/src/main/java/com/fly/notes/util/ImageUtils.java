@@ -91,6 +91,7 @@ public class ImageUtils {
 
     /**
      * 根据Uri获取图片绝对路径，解决Android4.4以上版本Uri转换
+     *
      * @param context
      * @param imageUri
      * @author yaoxing
@@ -125,7 +126,7 @@ public class ImageUtils {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
                 }
                 String selection = MediaStore.Images.Media._ID + "=?";
-                String[] selectionArgs = new String[] { split[1] };
+                String[] selectionArgs = new String[]{split[1]};
                 return getDataColumn(context, contentUri, selection, selectionArgs);
             }
         } // MediaStore (and general)
@@ -145,7 +146,7 @@ public class ImageUtils {
     public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
         Cursor cursor = null;
         String column = MediaStore.Images.Media.DATA;
-        String[] projection = { column };
+        String[] projection = {column};
         try {
             cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
             if (cursor != null && cursor.moveToFirst()) {
@@ -192,7 +193,7 @@ public class ImageUtils {
     }
 
 
-    public static List<String> getImageList(String s){
+    public static List<String> getImageList(String s) {
         List<String> list = new ArrayList<>();
         if (s.length() > 2) {
             String[] str = s.split(":");

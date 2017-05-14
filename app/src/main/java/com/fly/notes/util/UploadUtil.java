@@ -6,13 +6,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
+
 import com.fly.notes.db.DataBaseHelper;
 import com.fly.notes.db.NoteChangeType;
 import com.fly.notes.db.NoteInfoColumns;
 import com.fly.notes.db.NotesUser;
 import com.fly.notes.model.NoteInfo;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
@@ -110,7 +113,7 @@ public class UploadUtil {
                 BmobQuery query0 = new BmobQuery();
                 query0.addWhereEqualTo(NoteInfoColumns._ID, ((NoteInfo) b).getId());
                 BmobQuery query1 = new BmobQuery();
-                query1.addWhereEqualTo("author",NotesUser.getCurrentUser());
+                query1.addWhereEqualTo("author", NotesUser.getCurrentUser());
                 List<BmobQuery<NoteInfo>> andQuerys = new ArrayList<BmobQuery<NoteInfo>>();
                 andQuerys.add(query0);
                 andQuerys.add(query1);
@@ -144,7 +147,7 @@ public class UploadUtil {
             BmobQuery query0 = new BmobQuery();
             query0.addWhereEqualTo(NoteInfoColumns._ID, ((NoteInfo) b).getId());
             BmobQuery query1 = new BmobQuery();
-            query1.addWhereEqualTo("author",NotesUser.getCurrentUser());
+            query1.addWhereEqualTo("author", NotesUser.getCurrentUser());
             List<BmobQuery<NoteInfo>> andQuerys = new ArrayList<BmobQuery<NoteInfo>>();
             andQuerys.add(query0);
             andQuerys.add(query1);

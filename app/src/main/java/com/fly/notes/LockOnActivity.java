@@ -38,7 +38,7 @@ public class LockOnActivity extends BaseActivity {
     private void gestureEvent(boolean matched) {
         if (matched) {
             mTextView.setText("设置成功");
-            Setting setting = new Setting(mGesture.getChooseStr(),Setting.SHOW_PATH);
+            Setting setting = new Setting(mGesture.getChooseStr(), Setting.SHOW_PATH);
             NotesApplication.getInstance().setSettings(setting);
             setResult(RESULT_OK);
             finish();
@@ -58,18 +58,18 @@ public class LockOnActivity extends BaseActivity {
     // 回调监听
     private GestureLockViewGroup.OnGestureLockViewListener mListener = new
             GestureLockViewGroup.OnGestureLockViewListener() {
-        @Override
-        public void onGestureEvent(boolean matched) {
-            gestureEvent(matched);
-        }
+                @Override
+                public void onGestureEvent(boolean matched) {
+                    gestureEvent(matched);
+                }
 
-        @Override
-        public void onUnmatchedExceedBoundary() {
-        }
+                @Override
+                public void onUnmatchedExceedBoundary() {
+                }
 
-        @Override
-        public void onFirstSetPattern(boolean patternOk) {
-            firstSetPattern(patternOk);
-        }
-    };
+                @Override
+                public void onFirstSetPattern(boolean patternOk) {
+                    firstSetPattern(patternOk);
+                }
+            };
 }

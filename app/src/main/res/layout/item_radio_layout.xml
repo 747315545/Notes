@@ -19,6 +19,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/radio_text_margin_left"
-        android:layout_marginRight="@dimen/radio_text_margin_right"
-        />
+        android:layout_marginRight="@dimen/radio_text_margin_right" />
 </LinearLayout>

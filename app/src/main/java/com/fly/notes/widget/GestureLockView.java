@@ -9,13 +9,13 @@ import android.view.View;
 /**
  * Created by huangfei on 2017/5/4.
  */
-public class GestureLockView extends View{
+public class GestureLockView extends View {
     private static final String TAG = "GestureLockView";
+
     /**
      * GestureLockView的三种状态
      */
-    enum Mode
-    {
+    enum Mode {
         STATUS_NO_FINGER, STATUS_FINGER_ON, STATUS_FINGER_UP
     }
 
@@ -56,7 +56,6 @@ public class GestureLockView extends View{
     private Path mArrowPath;
     /**
      * 内圆的半径 = mInnerCircleRadiusRate * mRadus
-     *
      */
     private float mInnerCircleRadiusRate = 0.2F;
 
@@ -68,8 +67,7 @@ public class GestureLockView extends View{
     private int mColorFingerOn;
     private int mColorFingerUp;
 
-    public GestureLockView(Context context , int colorNoFingerInner , int colorNoFingerOutter , int colorFingerOn , int colorFingerUp )
-    {
+    public GestureLockView(Context context, int colorNoFingerInner, int colorNoFingerOutter, int colorFingerOn, int colorFingerUp) {
         super(context);
         this.mColorNoFingerInner = colorNoFingerInner;
         this.mColorNoFingerOutter = colorNoFingerOutter;
@@ -81,8 +79,7 @@ public class GestureLockView extends View{
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         mWidth = MeasureSpec.getSize(widthMeasureSpec);
@@ -106,11 +103,9 @@ public class GestureLockView extends View{
     }
 
     @Override
-    protected void onDraw(Canvas canvas)
-    {
+    protected void onDraw(Canvas canvas) {
 
-        switch (mCurrentStatus)
-        {
+        switch (mCurrentStatus) {
             case STATUS_FINGER_UP:
                 // 在手指抬起后，答案错误一定会进行绘制，如果答案正确那么再判断是否显示路径
                 if (!isAnswerRight || showPath) {
@@ -159,12 +154,11 @@ public class GestureLockView extends View{
 
     /**
      * 绘制箭头
+     *
      * @param canvas
      */
-    private void drawArrow(Canvas canvas)
-    {
-        if (mArrowDegree != -1)
-        {
+    private void drawArrow(Canvas canvas) {
+        if (mArrowDegree != -1) {
             mPaint.setStyle(Paint.Style.FILL);
 
             canvas.save();
@@ -181,8 +175,7 @@ public class GestureLockView extends View{
      *
      * @param mode
      */
-    public void setMode(Mode mode, boolean showPath)
-    {
+    public void setMode(Mode mode, boolean showPath) {
         this.mCurrentStatus = mode;
         this.showPath = showPath;
         invalidate();
@@ -193,13 +186,11 @@ public class GestureLockView extends View{
         mColorFingerUp = color;
     }
 
-    public void setArrowDegree(int degree)
-    {
+    public void setArrowDegree(int degree) {
         this.mArrowDegree = degree;
     }
 
-    public int getArrowDegree()
-    {
+    public int getArrowDegree() {
         return this.mArrowDegree;
     }
 
@@ -208,6 +199,7 @@ public class GestureLockView extends View{
 
     // 用于标记答案是否正确
     private boolean isAnswerRight;
+
     public void setIsAnswerRight(boolean isRight) {
         isAnswerRight = isRight;
     }

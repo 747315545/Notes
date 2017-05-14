@@ -1,6 +1,7 @@
 package com.fly.notes.db;
 
 import android.content.Context;
+
 import com.google.gson.Gson;
 import com.fly.notes.model.Setting;
 import com.fly.notes.util.SPUtil;
@@ -12,12 +13,15 @@ public class Config {
     private static final String TAG = Config.class.getSimpleName();
 
     private static Context mContext;
+
     //在application中调用init方法进行初始化，传入全局context
-    public final static void init(Context context){
+    public final static void init(Context context) {
         mContext = context;
     }
 
-    /** ---------------------------------------变量--------------------------------------------- */
+    /**
+     * ---------------------------------------变量---------------------------------------------
+     */
     // 设置存储的文件名
     public static final String FILE_NAME = "shared_info";
 
@@ -28,12 +32,15 @@ public class Config {
     public static final String KEY_GESTURE_SETTINGS = "Key_GestureSettings";
 
 
-    /** ---------------------------------------方法--------------------------------------------- */
+    /**
+     * ---------------------------------------方法---------------------------------------------
+     */
     // 保存手势设置信息
     public static void setGestureSettings(Setting settings) {
         String settingsStr = new Gson().toJson(settings);
         SPUtil.put(mContext, KEY_GESTURE_SETTINGS, settingsStr);
     }
+
     // 读取手势设置信息
     public static Setting getGestureSettings() {
         if (SPUtil.contains(mContext, KEY_GESTURE_SETTINGS)) {

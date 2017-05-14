@@ -46,9 +46,7 @@ public class FireworkView extends View {
     }
 
 
-
-
-    public void launch(float x, float y, int direction){
+    public void launch(float x, float y, int direction) {
         final Firework firework = new Firework(new Firework.Location(x, y), direction);
         firework.addAnimationEndListener(new Firework.AnimationEndListener() {
             @Override
@@ -66,7 +64,7 @@ public class FireworkView extends View {
     /**
      * @return the coordinate of cursor. x=float[0]; y=float[1];
      */
-    public float[] getCursorCoordinate (){
+    public float[] getCursorCoordinate() {
      /*
        *以下通过反射获取光标cursor的坐标。
        * 首先观察到TextView的invalidateCursorPath()方法，它是光标闪动时重绘的方法。
@@ -90,19 +88,19 @@ public class FireworkView extends View {
             Class<?> editorClazz = Class.forName("android.widget.Editor");
             Field drawables = editorClazz.getDeclaredField("mCursorDrawable");
             drawables.setAccessible(true);
-            Drawable[] drawable= (Drawable[]) drawables.get(mEditor);
+            Drawable[] drawable = (Drawable[]) drawables.get(mEditor);
 
-            Method getVerticalOffset = clazz.getDeclaredMethod("getVerticalOffset",boolean.class);
+            Method getVerticalOffset = clazz.getDeclaredMethod("getVerticalOffset", boolean.class);
             Method getCompoundPaddingLeft = clazz.getDeclaredMethod("getCompoundPaddingLeft");
             Method getExtendedPaddingTop = clazz.getDeclaredMethod("getExtendedPaddingTop");
             getVerticalOffset.setAccessible(true);
             getCompoundPaddingLeft.setAccessible(true);
             getExtendedPaddingTop.setAccessible(true);
-            if (drawable != null){
+            if (drawable != null) {
                 Rect bounds = drawable[0].getBounds();
                 //        Log.d(TAG,bounds.toString());
                 xOffset = (int) getCompoundPaddingLeft.invoke(mEditText) + bounds.left;
-                yOffset = (int) getExtendedPaddingTop.invoke(mEditText) + (int)getVerticalOffset.invoke(mEditText, false)+bounds.bottom;
+                yOffset = (int) getExtendedPaddingTop.invoke(mEditText) + (int) getVerticalOffset.invoke(mEditText, false) + bounds.bottom;
             }
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -121,22 +119,22 @@ public class FireworkView extends View {
         //当EditText的父view与FireworkView的坐标（左上角的坐标值）不一致时进行修正
         int[] positionE = new int[2];
         if (mEditText.getParent() != null) {
-            ((ViewGroup)mEditText.getParent()).getLocationInWindow(positionE);
+            ((ViewGroup) mEditText.getParent()).getLocationInWindow(positionE);
         }
         int[] positionF = new int[2];
         this.getLocationInWindow(positionF);
-        x = x+positionE[0]-positionF[0];
-        y = y+positionE[1]-positionF[1];
+        x = x + positionE[0] - positionF[0];
+        y = y + positionE[1] - positionF[1];
 
-        return new float[]{x , y};
+        return new float[]{x, y};
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        for (int i =0 ; i<fireworks.size(); i++){
+        for (int i = 0; i < fireworks.size(); i++) {
             fireworks.get(i).draw(canvas);
         }
-        if (fireworks.size()>0)
+        if (fireworks.size() > 0)
             invalidate();
     }
 }

@@ -100,6 +100,7 @@
                 android:scrollbars="none" />
         </ScrollView>
     </LinearLayout>
+
     <com.fly.notes.widget.FireworkView
         android:id="@+id/fire_work"
         android:layout_width="match_parent"

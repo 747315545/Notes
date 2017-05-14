@@ -16,32 +16,26 @@ import com.fly.notes.util.ImageUtils;
  */
 
 public class StrokeImageView
-        extends ImageView
-{
+        extends ImageView {
     public String picFolderAndName;
 
-    public StrokeImageView(Context paramContext)
-    {
+    public StrokeImageView(Context paramContext) {
         super(paramContext);
     }
 
-    public StrokeImageView(Context paramContext, AttributeSet paramAttributeSet)
-    {
+    public StrokeImageView(Context paramContext, AttributeSet paramAttributeSet) {
         super(paramContext, paramAttributeSet);
     }
 
-    public StrokeImageView(Context paramContext, AttributeSet paramAttributeSet, int paramInt)
-    {
+    public StrokeImageView(Context paramContext, AttributeSet paramAttributeSet, int paramInt) {
         super(paramContext, paramAttributeSet, paramInt);
     }
 
-    public StrokeImageView(Context paramContext, AttributeSet paramAttributeSet, int paramInt1, int paramInt2)
-    {
+    public StrokeImageView(Context paramContext, AttributeSet paramAttributeSet, int paramInt1, int paramInt2) {
         super(paramContext, paramAttributeSet, paramInt1, paramInt2);
     }
 
-    protected void onDraw(Canvas paramCanvas)
-    {
+    protected void onDraw(Canvas paramCanvas) {
         Rect localRect = new Rect(0, 0, paramCanvas.getWidth(), paramCanvas.getHeight());
         int i = NotesApplication.getInstance().getResources().getDimensionPixelOffset(R.dimen.add_pic_stroke_width);
         localRect.left += i / 2;
@@ -49,11 +43,11 @@ public class StrokeImageView
         localRect.right -= i / 2;
         localRect.bottom -= i / 2;
         Object localObject = new Paint();
-        ((Paint)localObject).setStrokeWidth(i);
-        ((Paint)localObject).setColor(getResources().getColor(R.color.pic_line_color));
-        ((Paint)localObject).setStyle(Paint.Style.STROKE);
-        paramCanvas.drawRect(localRect, (Paint)localObject);
+        ((Paint) localObject).setStrokeWidth(i);
+        ((Paint) localObject).setColor(getResources().getColor(R.color.pic_line_color));
+        ((Paint) localObject).setStyle(Paint.Style.STROKE);
+        paramCanvas.drawRect(localRect, (Paint) localObject);
         localObject = new Rect(localRect.left + i * 2, localRect.top + i * 2, localRect.right - i * 2, localRect.bottom - i * 2);
-        paramCanvas.drawBitmap(ImageUtils.drawableToBitmap(getDrawable()), null, (Rect)localObject, null);
+        paramCanvas.drawBitmap(ImageUtils.drawableToBitmap(getDrawable()), null, (Rect) localObject, null);
     }
 }

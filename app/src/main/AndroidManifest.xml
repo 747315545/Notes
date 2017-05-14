@@ -54,6 +54,10 @@
             android:name="com.fly.notes.RegistrationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name="com.fly.notes.AboutActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <provider
             android:name="com.fly.notes.db.NotesContentProvider"

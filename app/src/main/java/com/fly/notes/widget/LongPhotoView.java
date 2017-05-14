@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.fly.notes.R;
 import com.fly.notes.util.Utils;
 
@@ -96,17 +97,17 @@ public class LongPhotoView extends LinearLayout {
     }
 
 
-    private void layoutRadioLayout(boolean isShow, boolean isChecked,String paramString) {
+    private void layoutRadioLayout(boolean isShow, boolean isChecked, String paramString) {
         LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(this.mContext).inflate(R.layout.item_radio_layout, null);
         ImageView imageView = (ImageView) linearLayout.findViewById(R.id.iv_radio_btn);
-        if(isShow){
+        if (isShow) {
             imageView.setVisibility(VISIBLE);
             if (isChecked) {
                 imageView.setImageDrawable(this.mContext.getResources().getDrawable(R.drawable.checkbox_pressed));
-            }else {
+            } else {
                 imageView.setImageDrawable(this.mContext.getResources().getDrawable(R.drawable.checkbox_normal));
             }
-        }else {
+        } else {
             imageView.setVisibility(GONE);
         }
         TextView textView = (TextView) linearLayout.findViewById(R.id.radio_textview);
@@ -115,7 +116,7 @@ public class LongPhotoView extends LinearLayout {
         textView.setTextColor(this.mContext.getResources().getColor(R.color.share_photo_text_color));
         textView.setLineSpacing(this.mLineSpacingExtra, this.mLineSpacingMult);
         textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        textView.setPadding((int) this.mContext.getResources().getDimension(R.dimen.radio_text_padding_bottom),(int) this.mContext.getResources().getDimension(R.dimen.radio_text_padding_top),0,0);
+        textView.setPadding((int) this.mContext.getResources().getDimension(R.dimen.radio_text_padding_bottom), (int) this.mContext.getResources().getDimension(R.dimen.radio_text_padding_top), 0, 0);
         addView(linearLayout);
     }
 

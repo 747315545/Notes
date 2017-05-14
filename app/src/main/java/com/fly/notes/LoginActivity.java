@@ -3,12 +3,15 @@ package com.fly.notes;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.eftimoff.androipathview.PathView;
@@ -36,6 +39,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private EditText passWord;
     private Button login;
     private Button regist;
+    private RelativeLayout rlLoading;
     public static final String PHOTO_IMAGE_FILE_NAME = "fileImg.jpg";
 
     @Override
@@ -54,6 +58,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         passWord = (EditText) findViewById(R.id.ed_password);
         login = (Button) findViewById(R.id.btn_login);
         regist = (Button) findViewById(R.id.btn_regist);
+        rlLoading = (RelativeLayout) findViewById(R.id.rl_login_loading);
         ico.getPathAnimator().delay(500)
                 .duration(1000)
                 .start();
@@ -88,6 +93,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             ToastUtil.INSTANCE.makeToast(LoginActivity.this, getResources().getText(R.string.toastemailpasswordnotnull));
             return;
         }
+        rlLoading.setVisibility(View.VISIBLE);
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                rlLoading.setVisibility(View.GONE);
+                super.handleMessage(msg);
+            }
+        };
         NotesUser.loginByAccount(useremail, password, new LogInListener<NotesUser>() {
             @Override
             public void done(NotesUser notesUser, BmobException e) {
@@ -97,6 +110,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         file.download(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + PHOTO_IMAGE_FILE_NAME), new DownloadFileListener() {
                             @Override
                             public void done(String s, BmobException e) {
+                                handler.sendEmptyMessage(0);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }
@@ -106,11 +120,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                             }
                         });
-                    }else {
+                    } else {
+                        handler.sendEmptyMessage(0);
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                     }
                 } else {
+                    handler.sendEmptyMessage(0);
                     int errorcode = e.getErrorCode();
                     switch (errorcode) {
                         case ErrorCode.LOGIN_INCORRECT:

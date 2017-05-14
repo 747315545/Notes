@@ -1,6 +1,7 @@
 package com.fly.notes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,7 @@ public class LockActivity extends BaseActivity {
 
     /**
      * 处理手势图案的输入结果
+     *
      * @param matched
      */
     private void gestureEvent(boolean matched) {
@@ -56,7 +58,11 @@ public class LockActivity extends BaseActivity {
             mTextView.setText("输入正确");
             finish();
         } else {
-            mTextView.setText("手势错误，还剩"+ mGesture.getTryTimes() + "次");
+            if (mGesture.getTryTimes() > 0) {
+                mTextView.setText("手势错误，还剩" + mGesture.getTryTimes() + "次");
+            } else {
+                mTextView.setText("错误次数已达上限");
+            }
         }
     }
 
@@ -65,24 +71,26 @@ public class LockActivity extends BaseActivity {
      */
     private void unmatchedExceedBoundary() {
         // 正常情况这里需要做处理（如退出或重登）
-        Toast.makeText(mContext, "错误次数太多，请重新登录", Toast.LENGTH_SHORT).show();
+        mGesture.setEnabled(false);
+        Toast.makeText(mContext, "错误次数太多，即将退出！！！", Toast.LENGTH_SHORT).show();
+        NotesApplication.getInstance().exit();
     }
 
     // 手势操作的回调监听
     private GestureLockViewGroup.OnGestureLockViewListener mListener = new
             GestureLockViewGroup.OnGestureLockViewListener() {
-        @Override
-        public void onGestureEvent(boolean matched) {
-            gestureEvent(matched);
-        }
+                @Override
+                public void onGestureEvent(boolean matched) {
+                    gestureEvent(matched);
+                }
 
-        @Override
-        public void onUnmatchedExceedBoundary() {
-            unmatchedExceedBoundary();
-        }
+                @Override
+                public void onUnmatchedExceedBoundary() {
+                    unmatchedExceedBoundary();
+                }
 
-        @Override
-        public void onFirstSetPattern(boolean patternOk) {
-        }
-    };
+                @Override
+                public void onFirstSetPattern(boolean patternOk) {
+                }
+            };
 }

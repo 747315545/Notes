@@ -1,6 +1,7 @@
 package com.fly.notes.model;
 
 import android.content.ContentValues;
+
 import com.fly.notes.db.NoteInfoColumns;
 import com.fly.notes.db.NotesUser;
 
@@ -21,6 +22,7 @@ public class NoteInfo extends BmobObject {
     public NotesUser author;
     public List<String> imageList;
     public List<String> imageUrls;
+
     public NoteInfo() {
 
     }
@@ -97,7 +99,7 @@ public class NoteInfo extends BmobObject {
         this.imageUrls = imageUrls;
     }
 
-    public ContentValues getContentValues(){
+    public ContentValues getContentValues() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(NoteInfoColumns._ID, id);
         contentValues.put(NoteInfoColumns.MODIFIED_TIME, modifiedTime);

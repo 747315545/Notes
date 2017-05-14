@@ -7,8 +7,8 @@
     <dimen name="abc_text_size_title_material_toolbar">20.0dip</dimen>
     <dimen name="abc_config_prefDialogWidth">320.0dip</dimen>
     <dimen name="abc_search_view_text_min_width">160.0dip</dimen>
-    <item type="dimen" name="dialog_fixed_height_major">79.99999%</item>
-    <item type="dimen" name="dialog_fixed_height_minor">100.0%</item>
+    <item name="dialog_fixed_height_major" type="dimen">79.99999%</item>
+    <item name="dialog_fixed_height_minor" type="dimen">100.0%</item>
     <dimen name="dialog_fixed_width_major">320.0dip</dimen>
     <dimen name="dialog_fixed_width_minor">320.0dip</dimen>
     <dimen name="abc_action_bar_content_inset_material">16.0dip</dimen>
@@ -26,20 +26,24 @@
     <dimen name="abc_action_button_min_height_material">48.0dip</dimen>
     <dimen name="abc_action_button_min_width_material">48.0dip</dimen>
     <dimen name="abc_action_button_min_width_overflow_material">36.0dip</dimen>
-    <item type="dimen" name="abc_button_inset_horizontal_material">@dimen/abc_control_inset_material</item>
+    <item name="abc_button_inset_horizontal_material" type="dimen">
+        @dimen/abc_control_inset_material
+    </item>
     <dimen name="abc_button_inset_vertical_material">6.0dip</dimen>
     <dimen name="abc_button_padding_horizontal_material">8.0dip</dimen>
-    <item type="dimen" name="abc_button_padding_vertical_material">@dimen/abc_control_padding_material</item>
+    <item name="abc_button_padding_vertical_material" type="dimen">
+        @dimen/abc_control_padding_material
+    </item>
     <dimen name="abc_control_corner_material">2.0dip</dimen>
     <dimen name="abc_control_inset_material">4.0dip</dimen>
     <dimen name="abc_control_padding_material">4.0dip</dimen>
     <dimen name="abc_dialog_list_padding_vertical_material">8.0dip</dimen>
-    <item type="dimen" name="abc_dialog_min_width_major">65.0%</item>
-    <item type="dimen" name="abc_dialog_min_width_minor">95.00001%</item>
+    <item name="abc_dialog_min_width_major" type="dimen">65.0%</item>
+    <item name="abc_dialog_min_width_minor" type="dimen">95.00001%</item>
     <dimen name="abc_dialog_padding_material">24.0dip</dimen>
     <dimen name="abc_dialog_padding_top_material">18.0dip</dimen>
-    <item type="dimen" name="abc_disabled_alpha_material_dark">0.3</item>
-    <item type="dimen" name="abc_disabled_alpha_material_light">0.26</item>
+    <item name="abc_disabled_alpha_material_dark" type="dimen">0.3</item>
+    <item name="abc_disabled_alpha_material_light" type="dimen">0.26</item>
     <dimen name="abc_dropdownitem_icon_width">32.0dip</dimen>
     <dimen name="abc_dropdownitem_text_padding_left">8.0dip</dimen>
     <dimen name="abc_dropdownitem_text_padding_right">8.0dip</dimen>
@@ -47,7 +51,9 @@
     <dimen name="abc_edit_text_inset_horizontal_material">4.0dip</dimen>
     <dimen name="abc_edit_text_inset_top_material">10.0dip</dimen>
     <dimen name="abc_floating_window_z">16.0dip</dimen>
-    <item type="dimen" name="abc_list_item_padding_horizontal_material">@dimen/abc_action_bar_content_inset_material</item>
+    <item name="abc_list_item_padding_horizontal_material" type="dimen">
+        @dimen/abc_action_bar_content_inset_material
+    </item>
     <dimen name="abc_panel_menu_list_width">296.0dip</dimen>
     <dimen name="abc_search_view_preferred_width">320.0dip</dimen>
     <dimen name="abc_text_size_body_1_material">14.0sp</dimen>
@@ -71,15 +77,15 @@
     <dimen name="content_padding_top">42.0dip</dimen>
     <dimen name="dialog_item_text_size">15.0sp</dimen>
     <dimen name="dialog_title_text_size">16.0sp</dimen>
-    <item type="dimen" name="disabled_alpha_material_dark">0.3</item>
-    <item type="dimen" name="disabled_alpha_material_light">0.26</item>
+    <item name="disabled_alpha_material_dark" type="dimen">0.3</item>
+    <item name="disabled_alpha_material_light" type="dimen">0.26</item>
     <dimen name="frame_bg_bottom_padding">50.0dip</dimen>
     <dimen name="frame_bg_left_padding">16.0dip</dimen>
     <dimen name="frame_bg_right_padding">16.0dip</dimen>
     <dimen name="frame_bg_top_padding">16.0dip</dimen>
-    <item type="dimen" name="highlight_alpha_material_colored">0.26</item>
-    <item type="dimen" name="highlight_alpha_material_dark">0.2</item>
-    <item type="dimen" name="highlight_alpha_material_light">0.12</item>
+    <item name="highlight_alpha_material_colored" type="dimen">0.26</item>
+    <item name="highlight_alpha_material_dark" type="dimen">0.2</item>
+    <item name="highlight_alpha_material_light" type="dimen">0.12</item>
     <dimen name="no_results_margin_top">111.0dip</dimen>
     <dimen name="notification_large_icon_height">64.0dip</dimen>
     <dimen name="notification_large_icon_width">64.0dip</dimen>

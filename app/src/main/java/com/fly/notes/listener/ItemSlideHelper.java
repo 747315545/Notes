@@ -87,9 +87,9 @@ public class ItemSlideHelper implements RecyclerView.OnItemTouchListener, Gestur
                     }
                     smoothHorizontalExpandOrCollapse(DEFAULT_DURATION / 2);
                 } else if (canClick) {
-                    if(x-mLastX>0){
+                    if (x - mLastX > 0) {
                         return false;
-                    }else {
+                    } else {
                         mCallback.onItemClick(rv.getChildLayoutPosition(mTargetView));
                     }
                 }

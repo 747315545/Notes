@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
 import com.fly.notes.db.Config;
 
 
@@ -23,6 +24,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mContext = this;
         myApp = NotesApplication.getInstance();
+        myApp.addActivity(this);
     }
 
     @Override
@@ -30,10 +32,14 @@ public class BaseActivity extends AppCompatActivity {
         super.onResume();
         if (enableLock) {
             // 减得当前APP在后台滞留的时间 durTime
-            long durTime = System.currentTimeMillis() - myApp.getLockTime();
-            if (durTime > Config.LOCK_TIME) {
-                // 显示手势密码页面
+            if (myApp.getLockTime() == 0) {
                 showLockActivity();
+            } else {
+                long durTime = System.currentTimeMillis() - myApp.getLockTime();
+                if (durTime > Config.LOCK_TIME) {
+                    // 显示手势密码页面
+                    showLockActivity();
+                }
             }
         }
     }
@@ -59,7 +65,8 @@ public class BaseActivity extends AppCompatActivity {
         if (myApp.getSettings() != null
                 && myApp.getSettings().getGesture() != null
                 && !myApp.getSettings().getGesture().isEmpty()) {
-            startActivity(new Intent(mContext, LockActivity.class));
+            Intent intent = new Intent(mContext, LockActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -76,5 +83,11 @@ public class BaseActivity extends AppCompatActivity {
     protected void disablePatternLock(boolean nextShowLock) {
         enableLock = false;
         this.nextShowLock = nextShowLock;
+    }
+
+    @Override
+    protected void onDestroy() {
+        myApp.removeActivity(this);
+        super.onDestroy();
     }
 }

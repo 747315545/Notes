@@ -12,11 +12,11 @@
 
     <TextView
         android:id="@+id/tv_prompt_lock_on"
-        tools:text="hhh"
-        android:gravity="center"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        tools:text="hhh" />
 
     <com.fly.notes.widget.GestureLockViewGroup
         android:id="@+id/gesture_lock_view_group_lock_on"
@@ -24,10 +24,10 @@
         android:layout_height="match_parent"
         android:background="#00ffffff"
         android:gravity="center_vertical"
-        zhy:count="3"
-        zhy:tryTimes="5"
+        zhy:color_finger_on="#ff3595ff"
         zhy:color_no_finger_inner_circle="#00000000"
         zhy:color_no_finger_outer_circle="#ff3595ff"
-        zhy:color_finger_on="#ff3595ff" />
+        zhy:count="3"
+        zhy:tryTimes="5" />
 
 </RelativeLayout>

@@ -573,6 +573,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                handler.init();
                 downloadUtil.downloadBatch();
             }
         }).start();

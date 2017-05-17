@@ -16,6 +16,7 @@ public class NotesContentProvider extends ContentProvider {
     private final static UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     private final static int CRUD = 1;
     private final static int DELETEITEM = 2;
+    private final static int NOTESCHANGE = 3;
     private final static String NOTESTABLENAME = "notes";
     private final static String NOTESCHANGETABLENAME = "notesChange";
     SQLiteDatabase db;
@@ -23,6 +24,7 @@ public class NotesContentProvider extends ContentProvider {
     static {
         uriMatcher.addURI("com.fly.notes", "notes", CRUD);
         uriMatcher.addURI("com.fly.notes", "notes_id", DELETEITEM);
+        uriMatcher.addURI("com.fly.notes", "noteschange", NOTESCHANGE);
     }
 
     @Override
@@ -91,6 +93,12 @@ public class NotesContentProvider extends ContentProvider {
                 if (result == -1) {
                     this.getContext().getContentResolver().notifyChange(Uri.parse("content://com.fly.notes/notes"), null);
                 }
+                break;
+            case NOTESCHANGE:
+                for (String a : selectionArgs) {
+                    db.delete(NOTESCHANGETABLENAME, selection, new String[]{a});
+                }
+                break;
         }
         return 0;
     }

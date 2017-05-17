@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.fly.notes.R;
 import com.fly.notes.db.NoteChangeType;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.DownloadFileListener;
@@ -33,6 +35,7 @@ public class DownloadUtil {
     private Context mcontext;
     private Handler mhandler;
     private final static Uri uri = Uri.parse("content://com.fly.notes/notes");
+    private final static Uri urichange = Uri.parse("content://com.fly.notes/noteschange");
 
     public DownloadUtil(Context context, Handler handler) {
         mcontext = context;
@@ -40,19 +43,23 @@ public class DownloadUtil {
     }
 
     public void downloadBatch() {
+        NotesUser user = BmobUser.getCurrentUser(NotesUser.class);
         BmobQuery bmobQuery = new BmobQuery();
-        bmobQuery.addWhereEqualTo("author", NotesUser.getCurrentUser(NotesUser.class));
+        bmobQuery.addWhereEqualTo("author", user);
         bmobQuery.findObjects(new FindListener<NoteInfo>() {
             @Override
             public void done(List<NoteInfo> list, BmobException e) {
                 if (e == null) {
-                    swtichDownload(list);
+                    if (list == null) {
+                        mhandler.sendEmptyMessage(-1);
+                    } else {
+                        swtichDownload(list);
+                    }
                 } else {
                     ToastUtil.INSTANCE.makeToast(mcontext, mcontext.getResources().getText(R.string.toastuploaderror));
                     mhandler.sendEmptyMessage(-1);
                 }
             }
-
         });
     }
 
@@ -86,12 +93,21 @@ public class DownloadUtil {
 
 
     private void download(NoteInfo noteInfo, final boolean exists) {
-
         final long id = noteInfo.getId();
         List<String> imageurls = noteInfo.getImageUrls();
         List<String> imageList = noteInfo.getImageList();
-        final int size = imageurls.size();
         final ContentValues contentValues = noteInfo.getContentValues();
+        if (imageurls == null || imageList == null) {
+            if (exists) {
+                mcontext.getContentResolver().update(uri, contentValues, "id=?", new String[]{id + ""});
+            } else {
+                mcontext.getContentResolver().insert(uri, contentValues);
+            }
+            mhandler.sendEmptyMessage(NoteChangeType.ADD);
+            mcontext.getContentResolver().delete(urichange, "id=?", new String[]{id + ""});
+            return;
+        }
+        final int size = imageurls.size();
         final Handler handler = new Handler() {
             int i = 0;
             int max = size;
@@ -105,6 +121,7 @@ public class DownloadUtil {
                     } else {
                         mcontext.getContentResolver().insert(uri, contentValues);
                     }
+                    mcontext.getContentResolver().delete(urichange, "id=?", new String[]{id + ""});
                     mhandler.sendEmptyMessage(NoteChangeType.ADD);
                 }
                 super.handleMessage(msg);
